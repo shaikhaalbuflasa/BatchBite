@@ -1,0 +1,113 @@
+<mxfile host="app.diagrams.net">
+  <diagram name="Preorder Sequence" id="0">
+    <mxGraphModel dx="1315" dy="907" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" parent="1" style="text;html=1;strokeColor=none;fillColor=none;fontSize=22;fontStyle=1;align=center;" value="BatchBite — Sequence Diagram For Placing an Order" vertex="1">
+          <mxGeometry height="42" width="900" x="130" y="22" as="geometry" />
+        </mxCell>
+        <mxCell id="h0" parent="1" style="rounded=0;html=1;whiteSpace=wrap;fillColor=#FFFFFF;strokeColor=#222222;strokeWidth=1.5;fontStyle=1;fontSize=13;" value="Customer" vertex="1">
+          <mxGeometry height="45" width="160" x="10" y="100" as="geometry" />
+        </mxCell>
+        <mxCell id="l0" parent="1" style="shape=line;direction=south;dashed=1;dashPattern=5 5;strokeColor=#888888;" value="" vertex="1">
+          <mxGeometry height="570" width="1" x="90" y="145" as="geometry" />
+        </mxCell>
+        <mxCell id="h1" parent="1" style="rounded=0;html=1;whiteSpace=wrap;fillColor=#FFFFFF;strokeColor=#222222;strokeWidth=1.5;fontStyle=1;fontSize=13;" value="Mobile App" vertex="1">
+          <mxGeometry height="45" width="160" x="200" y="100" as="geometry" />
+        </mxCell>
+        <mxCell id="l1" parent="1" style="shape=line;direction=south;dashed=1;dashPattern=5 5;strokeColor=#888888;" value="" vertex="1">
+          <mxGeometry height="570" width="1" x="280" y="145" as="geometry" />
+        </mxCell>
+        <mxCell id="h2" parent="1" style="rounded=0;html=1;whiteSpace=wrap;fillColor=#FFFFFF;strokeColor=#222222;strokeWidth=1.5;fontStyle=1;fontSize=13;" value="Order Service" vertex="1">
+          <mxGeometry height="45" width="160" x="390" y="100" as="geometry" />
+        </mxCell>
+        <mxCell id="l2" parent="1" style="shape=line;direction=south;dashed=1;dashPattern=5 5;strokeColor=#888888;" value="" vertex="1">
+          <mxGeometry height="570" width="1" x="470" y="145" as="geometry" />
+        </mxCell>
+        <mxCell id="h3" parent="1" style="rounded=0;html=1;whiteSpace=wrap;fillColor=#FFFFFF;strokeColor=#222222;strokeWidth=1.5;fontStyle=1;fontSize=13;" value="Availability Service" vertex="1">
+          <mxGeometry height="45" width="160" x="580" y="100" as="geometry" />
+        </mxCell>
+        <mxCell id="l3" parent="1" style="shape=line;direction=south;dashed=1;dashPattern=5 5;strokeColor=#888888;" value="" vertex="1">
+          <mxGeometry height="570" width="1" x="660" y="145" as="geometry" />
+        </mxCell>
+        <mxCell id="h4" parent="1" style="rounded=0;html=1;whiteSpace=wrap;fillColor=#FFFFFF;strokeColor=#222222;strokeWidth=1.5;fontStyle=1;fontSize=13;" value="Payment Service" vertex="1">
+          <mxGeometry height="45" width="160" x="770" y="100" as="geometry" />
+        </mxCell>
+        <mxCell id="l4" parent="1" style="shape=line;direction=south;dashed=1;dashPattern=5 5;strokeColor=#888888;" value="" vertex="1">
+          <mxGeometry height="570" width="1" x="850" y="145" as="geometry" />
+        </mxCell>
+        <mxCell id="h5" parent="1" style="rounded=0;html=1;whiteSpace=wrap;fillColor=#FFFFFF;strokeColor=#222222;strokeWidth=1.5;fontStyle=1;fontSize=13;" value="Notification Service" vertex="1">
+          <mxGeometry height="45" width="160" x="960" y="100" as="geometry" />
+        </mxCell>
+        <mxCell id="l5" parent="1" style="shape=line;direction=south;dashed=1;dashPattern=5 5;strokeColor=#888888;" value="" vertex="1">
+          <mxGeometry height="570" width="1" x="1040" y="145" as="geometry" />
+        </mxCell>
+        <mxCell id="a0" edge="1" parent="1" style="edgeStyle=none;html=1;strokeWidth=1.4;endArrow=classic;fontSize=12;labelBackgroundColor=#FFFFFF;" value="1. Select product &amp;amp; pickup slot">
+          <mxGeometry relative="1" x="-0.0526" y="10" as="geometry">
+            <mxPoint as="offset" />
+            <mxPoint x="90" y="190" as="sourcePoint" />
+            <mxPoint x="280" y="190" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="a1" edge="1" parent="1" style="edgeStyle=none;html=1;strokeWidth=1.4;endArrow=classic;fontSize=12;labelBackgroundColor=#FFFFFF;" value="2. Place order">
+          <mxGeometry relative="1" x="-0.0526" y="10" as="geometry">
+            <mxPoint as="offset" />
+            <mxPoint x="280" y="250" as="sourcePoint" />
+            <mxPoint x="470" y="250" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="a2" edge="1" parent="1" style="edgeStyle=none;html=1;strokeWidth=1.4;endArrow=classic;fontSize=12;labelBackgroundColor=#FFFFFF;" value="3. Check batch &amp;amp; stock">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="470" y="310" as="sourcePoint" />
+            <mxPoint x="660" y="310" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="a3" edge="1" parent="1" style="edgeStyle=none;html=1;strokeWidth=1.4;endArrow=classic;fontSize=12;labelBackgroundColor=#FFFFFF;dashed=1;" value="4. Available / unavailable">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="660" y="370" as="sourcePoint" />
+            <mxPoint x="470" y="370" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="a4" edge="1" parent="1" style="edgeStyle=none;html=1;strokeWidth=1.4;endArrow=classic;fontSize=12;labelBackgroundColor=#FFFFFF;" value="5. Simulate payment">
+          <mxGeometry relative="1" y="10" as="geometry">
+            <mxPoint as="offset" />
+            <mxPoint x="470" y="470" as="sourcePoint" />
+            <mxPoint x="850" y="470" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="a5" edge="1" parent="1" style="edgeStyle=none;html=1;strokeWidth=1.4;endArrow=classic;fontSize=12;labelBackgroundColor=#FFFFFF;dashed=1;" value="6. Payment approved">
+          <mxGeometry relative="1" x="-0.1053" y="-10" as="geometry">
+            <mxPoint as="offset" />
+            <mxPoint x="850" y="530" as="sourcePoint" />
+            <mxPoint x="470" y="530" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="a6" edge="1" parent="1" style="edgeStyle=none;html=1;strokeWidth=1.4;endArrow=classic;fontSize=12;labelBackgroundColor=#FFFFFF;" value="7. Send confirmation">
+          <mxGeometry relative="1" x="0.0526" y="10" as="geometry">
+            <mxPoint as="offset" />
+            <mxPoint x="470" y="590" as="sourcePoint" />
+            <mxPoint x="1040" y="590" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="a7" edge="1" parent="1" style="edgeStyle=none;html=1;strokeWidth=1.4;endArrow=classic;fontSize=12;labelBackgroundColor=#FFFFFF;dashed=1;" value="8. Confirm order">
+          <mxGeometry relative="1" x="-0.0526" y="-10" as="geometry">
+            <mxPoint as="offset" />
+            <mxPoint x="470" y="650" as="sourcePoint" />
+            <mxPoint x="280" y="650" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="a8" edge="1" parent="1" style="edgeStyle=none;html=1;strokeWidth=1.4;endArrow=classic;fontSize=12;labelBackgroundColor=#FFFFFF;dashed=1;" value="9. Display confirmation">
+          <mxGeometry relative="1" x="-0.0526" y="-10" as="geometry">
+            <mxPoint as="offset" />
+            <mxPoint x="280" y="700" as="sourcePoint" />
+            <mxPoint x="90" y="700" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="note" parent="1" style="rounded=0;html=1;whiteSpace=wrap;fillColor=#F7F7F7;strokeColor=#777777;dashed=1;fontSize=12;" value="If unavailable: customer selects another batch or pickup slot and payment is not attempted" vertex="1">
+          <mxGeometry height="42" width="660" x="381" y="392" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
