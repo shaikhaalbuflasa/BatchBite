@@ -52,7 +52,7 @@ BatchBite has four roles. On the login page, choose **Who are you?** and then lo
 | Kitchen Staff | Created by their Business Owner on the **Kitchen Staff** page (no sign-up) | Kitchen Dashboard (order status, delay notices, preparation groups, production tasks, pickup verification), ingredients and recipe calculator |
 | Customer | **Sign up** (choose Customer) | Browse open batches, cart, pickup slot, checkout, My Orders (track, change, cancel, QR pickup code) |
 
-**Switching between roles:** click **Switch** in the top bar. It lists every account you have signed in to on this browser, so you can jump between the Administrator, Business Owner, Kitchen Staff and Customer views in one click, or choose **Log in to another account**.
+**Switching between roles:** click **Switch** in the top bar. It lists every account you have signed in to on this browser, so you can jump between the Administrator, Business Owner, Kitchen Staff and Customer views in one click, or choose **Log in to another account**. For security, switching to the **Administrator** always asks for the Administrator password again; the other roles switch in one click.
 
 ## Try the full order journey (about 10 minutes)
 
