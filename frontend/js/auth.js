@@ -40,8 +40,9 @@ const Auth = (() => {
     { id: 'products',  title: 'Products & Batches', href: 'products.html',        roles: ['BusinessOwner'],                 ready: true, text: 'Create and edit products and production batches.' },
     { id: 'slots',     title: 'Pickup Slots',       href: 'pickup-slots.html',    roles: ['BusinessOwner'],                 ready: true, text: 'Create pickup time slots and set their limits.' },
     { id: 'dashboard', title: 'Owner Dashboard',    href: 'owner-dashboard.html', roles: ['BusinessOwner'],                 ready: false, text: 'See your orders, reports and production progress.' },
-    { id: 'inventory', title: 'Ingredients',        href: 'ingredients.html',     roles: ['BusinessOwner', 'KitchenStaff'], ready: false, text: 'Check stock levels and recipe requirements.' },
-    { id: 'kitchen',   title: 'Kitchen Board',      href: 'kitchen.html',         roles: ['KitchenStaff', 'BusinessOwner'], ready: false, text: 'Update order status, manage tasks and verify pickup codes.' },
+    { id: 'inventory', title: 'Ingredients',        href: 'ingredients.html',     roles: ['BusinessOwner', 'KitchenStaff'], ready: true,  text: 'Check stock levels and recipe requirements.' },
+    { id: 'kitchen',   title: 'Kitchen Dashboard',  href: 'kitchen.html',         roles: ['KitchenStaff', 'BusinessOwner'], ready: true,  text: 'Update order status, manage tasks and verify pickup codes.' },
+    { id: 'notifications', title: 'Notifications', href: 'notifications.html', roles: ['Customer', 'BusinessOwner', 'KitchenStaff', 'Administrator'], ready: true, text: 'See order updates such as confirmations, delays and pickups.' },
     { id: 'users',     title: 'Manage Users',       href: 'admin-users.html',     roles: ['Administrator'],                 ready: true,  text: 'View all accounts, change roles, activate or deactivate users and delete accounts.' },
     { id: 'account',   title: 'My Account',         href: 'profile.html',         roles: ['Customer', 'BusinessOwner', 'KitchenStaff', 'Administrator'], ready: true, text: 'See your account details and sign out.' }
   ];
