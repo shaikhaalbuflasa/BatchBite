@@ -1,0 +1,65 @@
+/*
+ * BatchBite - Pickup and Order Management styles (Marwa)
+ * Used by pickup-slots.html, my-orders.html and owner-dashboard.html.
+ * Only uses the shared palette variables from css/style.css.
+ */
+
+.toolbar { display: flex; gap: .6rem; flex-wrap: wrap; align-items: center; margin-bottom: 1rem; }
+.toolbar select, .toolbar input[type=search] { width: auto; min-width: 180px; }
+.chip-row { display: flex; gap: .4rem; flex-wrap: wrap; }
+.chip { border: 1px solid var(--line-strong); background: var(--white); color: var(--ink); border-radius: 999px; padding: .35em .9em; font: inherit; font-size: .85rem; cursor: pointer; }
+.chip[aria-pressed="true"] { background: var(--baby-pink); border-color: var(--strawberry); color: var(--primary-ink); font-weight: 600; }
+
+.grid-2 { display: grid; grid-template-columns: minmax(280px, 1fr) 2fr; gap: 1.25rem; align-items: start; }
+@media (max-width: 860px) { .grid-2 { grid-template-columns: 1fr; } }
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0 .8rem; }
+.form-grid .full { grid-column: 1 / -1; }
+input[type=time], input[type=date] { width: 100%; font: inherit; color: var(--ink-strong); padding: .7em .9em; border-radius: var(--radius-sm); border: 1px solid var(--line-strong); background: var(--white); }
+
+/* Pickup slots */
+.batch-group + .batch-group { margin-top: 1.25rem; }
+.batch-group h3 { margin: 0 0 .2rem; }
+.slot-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: .75rem; margin-top: .8rem; }
+.slot { border: 1px solid var(--line); border-radius: var(--radius-sm); padding: .8rem .9rem; background: var(--vanilla-cream); }
+.slot .time { font-weight: 600; color: var(--ink-strong); }
+.meter { height: 8px; border-radius: 99px; background: var(--line); overflow: hidden; margin: .5rem 0 .3rem; }
+.meter > span { display: block; height: 100%; background: var(--pastel-green); }
+.meter.warn > span { background: var(--butter-yellow); }
+.meter.full > span { background: var(--strawberry); }
+
+/* Order status badges */
+.order-status { display: inline-block; font-size: .75rem; font-weight: 600; padding: .25em .7em; border-radius: 999px; white-space: nowrap; }
+.st-Confirmed { background: var(--butter-yellow); color: var(--primary-ink); }
+.st-Preparing { background: var(--baby-pink); color: var(--primary-ink); }
+.st-Ready { background: var(--success-bg); color: var(--success-ink); border: 1px solid var(--pastel-green); }
+.st-Collected { background: var(--chocolate); color: var(--white); }
+.st-Cancelled { background: var(--danger-bg); color: var(--danger); }
+
+/* Order cards (customer) */
+.order-card .order-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; flex-wrap: wrap; }
+.order-card h3 { margin: 0; }
+.order-items { margin: .9rem 0; border-top: 1px solid var(--line); }
+.order-items .line { font-size: .92rem; }
+.order-meta { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: .6rem; font-size: .88rem; margin: .6rem 0 1rem; }
+.order-meta div span { display: block; color: var(--muted); font-size: .75rem; text-transform: uppercase; letter-spacing: .04em; }
+.order-actions { display: flex; gap: .5rem; flex-wrap: wrap; }
+
+/* Progress tracker: Confirmed -> Preparing -> Ready -> Collected */
+.tracker { display: grid; grid-template-columns: repeat(4, 1fr); gap: .3rem; margin: 1rem 0 .4rem; list-style: none; padding: 0; }
+.tracker li { text-align: center; font-size: .75rem; color: var(--muted); position: relative; padding-top: 1.4rem; }
+.tracker li::before { content: ""; position: absolute; top: .3rem; left: 0; right: 0; height: 6px; border-radius: 99px; background: var(--line); }
+.tracker li.done { color: var(--ink-strong); font-weight: 600; }
+.tracker li.done::before { background: var(--strawberry); }
+.tracker li.current::before { background: var(--pastel-green); }
+.tracker time { display: block; font-weight: 400; color: var(--muted); font-size: .7rem; }
+
+/* QR code */
+.qr-box { text-align: center; }
+.qr-box img { width: 220px; height: 220px; image-rendering: pixelated; border: 8px solid var(--white); border-radius: var(--radius-sm); box-shadow: var(--shadow); }
+.qr-box code { display: block; margin-top: .8rem; font-size: .72rem; word-break: break-all; color: var(--muted); }
+.copy-btn { margin-top: .6rem; }
+
+/* Owner dashboard */
+.progress-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: .6rem; margin: .6rem 0 1.4rem; }
+td .muted { display: block; }
+.status-cell { white-space: nowrap; }

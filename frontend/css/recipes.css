@@ -1,0 +1,12 @@
+/* BatchBite - recipe editor on the Products page (uses the shared palette in style.css) */
+.recipe-row { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr auto; gap: .5rem; align-items: end; border-bottom: 1px solid var(--line); padding-bottom: .4rem; margin-bottom: .6rem; }
+.recipe-row .field { margin-bottom: .3rem; }
+.recipe-row .link-btn { margin-bottom: 1rem; }
+.recipe-row input:disabled, .recipe-row select:disabled { background: var(--vanilla-cream); color: var(--muted); }
+.recipe-missing { color: var(--danger); font-weight: 600; }
+.modal:has(#recipe-rows) { max-width: 760px; width: calc(100% - 2rem); }
+@media (max-width: 640px) {
+  .recipe-row { grid-template-columns: 1fr 1fr; }
+  .recipe-row .field:first-child { grid-column: 1 / -1; }
+}
+.modal .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0 .8rem; }
