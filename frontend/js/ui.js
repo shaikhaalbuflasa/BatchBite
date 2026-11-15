@@ -131,6 +131,7 @@ const UI = (() => {
         '<div class="header-user">' +
           '<span class="avatar" aria-hidden="true">' + escape(initials(user.name)) + '</span>' +
           '<span class="header-user-text"><strong>' + escape(user.name) + '</strong>' + roleBadge(user.role) + '</span>' +
+          '<button type="button" class="btn btn-secondary btn-sm" id="switch-btn" title="Switch between your accounts and roles">Switch</button>' +
           '<button type="button" class="btn btn-secondary btn-sm" id="logout-btn">Log out</button>' +
         '</div>' +
       '</div>';
@@ -160,6 +161,8 @@ const UI = (() => {
     const landed = tabs.find(tab => tab.target && tab.href === (location.pathname.split('/').pop() + location.hash));
     if (landed) scrollToTarget(landed.target);
 
+    document.getElementById('switch-btn').addEventListener('click', () => switchAccount(user));
+
     document.getElementById('logout-btn').addEventListener('click', () => {
       confirm({
         title: 'Log out?',
@@ -171,6 +174,40 @@ const UI = (() => {
         location.replace('login.html?loggedOut=1');
       });
     });
+  }
+
+  /* ---------- switch account ----------
+   * Lists every account signed in on this browser (Auth.savedAccounts) so the
+   * user can jump between Administrator, Business Owner, Kitchen Staff and
+   * Customer views in one click, or sign in to another account.
+   */
+  function switchAccount(user) {
+    if (!document.querySelector('link[href="css/accounts.css"]')) {
+      document.head.insertAdjacentHTML('beforeend', '<link rel="stylesheet" href="css/accounts.css">');
+    }
+    const accounts = Auth.savedAccounts();
+    const row = a => {
+      const isCurrent = a.user.id === user.id;
+      return '<button type="button" class="account-row' + (isCurrent ? ' current' : '') + '" data-account="' + a.user.id + '"' + (isCurrent ? ' disabled' : '') + '>' +
+        '<span class="avatar" aria-hidden="true">' + escape(initials(a.user.name)) + '</span>' +
+        '<span class="account-text"><strong>' + escape(a.user.name) + '</strong><span class="muted small">' + escape(a.user.email) + '</span></span>' +
+        roleBadge(a.user.role) +
+        (isCurrent ? '<span class="small muted">Current</span>' : '') +
+      '</button>';
+    };
+    modal({
+      title: 'Switch account',
+      message: 'Accounts you have signed in to on this browser. Pick one to see BatchBite as that role.',
+      bodyHtml: '<div class="account-list">' + accounts.map(row).join('') + '</div>' +
+        '<a class="btn btn-secondary btn-block" href="login.html?add=1" id="add-account">Log in to another account</a>',
+      confirmText: 'Close',
+      cancelText: 'Cancel'
+    });
+    document.querySelectorAll('[data-account]').forEach(btn => btn.addEventListener('click', () => {
+      const next = Auth.switchTo(Number(btn.dataset.account));
+      if (!next) { toast('That account has signed out. Please log in again.', 'error'); return; }
+      location.href = 'home.html';
+    }));
   }
 
   /* ---------- server unreachable banner ---------- */

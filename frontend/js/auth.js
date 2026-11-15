@@ -39,6 +39,7 @@ const Auth = (() => {
     { id: 'myorders',  title: 'My Orders',          href: 'my-orders.html',       roles: ['Customer'],                      ready: true, text: 'Track your orders, modify or cancel them, and show your pickup QR code.' },
     { id: 'products',  title: 'Products & Batches', href: 'products.html',        roles: ['BusinessOwner'],                 ready: true, text: 'Create and edit products and production batches.' },
     { id: 'slots',     title: 'Pickup Slots',       href: 'pickup-slots.html',    roles: ['BusinessOwner'],                 ready: true, text: 'Create pickup time slots and set their limits.' },
+    { id: 'staff',     title: 'Kitchen Staff',      href: 'staff.html',           roles: ['BusinessOwner'],                 ready: true, text: 'Create logins for your kitchen team and turn their access on or off.' },
     { id: 'dashboard', title: 'Owner Dashboard',    href: 'owner-dashboard.html', roles: ['BusinessOwner'],                 ready: true, text: 'See your orders, reports and production progress.' },
     { id: 'inventory', title: 'Ingredients',        href: 'ingredients.html',     roles: ['BusinessOwner', 'KitchenStaff'], ready: true,  text: 'Check stock levels and recipe requirements.' },
     { id: 'kitchen',   title: 'Kitchen Dashboard',  href: 'kitchen.html',         roles: ['KitchenStaff', 'BusinessOwner'], ready: true,  text: 'Update order status, manage tasks and verify pickup codes.' },
@@ -100,6 +101,58 @@ const Auth = (() => {
     Store.remove(SESSION_KEY);
   }
 
+  /* ---------------- saved accounts (switch account) ----------------
+   * Every account signed in on this browser is remembered so the user can
+   * switch between roles in one click. Accounts from "Keep me signed in"
+   * stay after the browser closes (localStorage); others are kept only for
+   * this browser session (sessionStorage), the same rule as the session.
+   */
+  const ACCOUNTS_KEEP = 'accounts';
+  const ACCOUNTS_TEMP = 'accountsTemp';
+
+  function readAccounts(key, persistent) {
+    try {
+      const raw = (persistent ? localStorage : sessionStorage).getItem('batchbite.' + key);
+      const list = raw ? JSON.parse(raw) : [];
+      return Array.isArray(list) ? list : [];
+    } catch (err) { return []; }
+  }
+
+  function writeAccounts(key, persistent, list) {
+    try { (persistent ? localStorage : sessionStorage).setItem('batchbite.' + key, JSON.stringify(list)); }
+    catch (err) { /* storage unavailable: switching just isn't remembered */ }
+  }
+
+  function savedAccounts() {
+    const now = new Date();
+    const all = readAccounts(ACCOUNTS_KEEP, true).map(a => Object.assign({}, a, { persistent: true }))
+      .concat(readAccounts(ACCOUNTS_TEMP, false).map(a => Object.assign({}, a, { persistent: false })));
+    const seen = new Set();
+    return all.filter(a => a && a.user && a.token && new Date(a.expiresAt) > now && !seen.has(a.user.id) && seen.add(a.user.id))
+      .sort((a, b) => ((ROLES[b.user.role] || {}).level || 0) - ((ROLES[a.user.role] || {}).level || 0));
+  }
+
+  function forgetAccount(userId) {
+    [[ACCOUNTS_KEEP, true], [ACCOUNTS_TEMP, false]].forEach(([key, persistent]) =>
+      writeAccounts(key, persistent, readAccounts(key, persistent).filter(a => !a.user || a.user.id !== userId)));
+  }
+
+  function rememberAccount(session, persistent) {
+    forgetAccount(session.user.id);
+    const key = persistent ? ACCOUNTS_KEEP : ACCOUNTS_TEMP;
+    writeAccounts(key, persistent, readAccounts(key, persistent).concat([session]));
+  }
+
+  /** Make a saved account the current one. Returns the user, or null if it is no longer saved. */
+  function switchTo(userId) {
+    const account = savedAccounts().find(a => a.user.id === userId);
+    if (!account) return null;
+    const session = { token: account.token, user: account.user, signedInAt: account.signedInAt, expiresAt: account.expiresAt };
+    Store.set(SESSION_KEY, session, account.persistent);
+    Store.set('lastEmail', account.user.email, true);
+    return account.user;
+  }
+
   /* ---------------- registration ---------------- */
 
   async function register(data) {
@@ -114,7 +167,12 @@ const Auth = (() => {
     try {
       const user = await Api.request('/register', {
         method: 'POST',
-        body: { name: data.name.trim(), email: data.email.trim(), password: data.password }
+        body: {
+          name: data.name.trim(),
+          email: data.email.trim(),
+          password: data.password,
+          accountType: data.accountType === 'BusinessOwner' ? 'BusinessOwner' : 'Customer'
+        }
       });
       return { ok: true, user };
     } catch (err) {
@@ -125,7 +183,7 @@ const Auth = (() => {
 
   /* ---------------- login / logout ---------------- */
 
-  async function login(email, password, remember) {
+  async function login(email, password, remember, expectedRole) {
     if (!String(email || '').trim()) return fail('Email is required.', 'email');
     if (!password) return fail('Password is required.', 'password');
 
@@ -134,12 +192,20 @@ const Auth = (() => {
         method: 'POST',
         body: { email: email.trim(), password }
       });
-      Store.set(SESSION_KEY, {
+      // The account must match the role chosen on the login page
+      if (expectedRole && ROLES[expectedRole] && result.user.role !== expectedRole) {
+        try { await Api.request('/logout', { method: 'POST', token: result.token }); } catch (e) { /* ignore */ }
+        const actual = ROLES[result.user.role] ? ROLES[result.user.role].label : result.user.role;
+        return fail('This is a ' + actual + ' account. Choose "' + actual + '" above to log in with it.', 'email');
+      }
+      const session = {
         token: result.token,
         user: result.user,
         signedInAt: new Date().toISOString(),
         expiresAt: new Date(Date.now() + SESSION_HOURS * 3600000).toISOString()
-      }, !!remember);
+      };
+      Store.set(SESSION_KEY, session, !!remember);
+      rememberAccount(session, !!remember);
       Store.set('lastEmail', result.user.email, true);
       return { ok: true, user: result.user };
     } catch (err) {
@@ -154,6 +220,7 @@ const Auth = (() => {
     const session = getSession();
     clearSession();
     if (!session) return;
+    forgetAccount(session.user.id);
     try {
       await Api.request('/logout', { method: 'POST', token: session.token });
     } catch (err) {
@@ -174,6 +241,7 @@ const Auth = (() => {
       return 'valid';
     } catch (err) {
       if (err.status === 401 || err.status === 403) {
+        forgetAccount(session.user.id);
         clearSession();
         return 'expired';
       }
@@ -272,6 +340,7 @@ const Auth = (() => {
   return {
     ROLES, MODULES,
     register, login, logout, currentUser, token, checkSession, hasRole, requireRole, modulesFor,
+    savedAccounts, switchTo, forgetAccount,
     listUsers, setRole, setActive, deleteUser,
     validate: { name: validateName, email: validateEmail, password: validatePassword }
   };
