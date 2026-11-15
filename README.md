@@ -8,8 +8,8 @@ Customers browse open production batches, order, and pick a pickup slot. Busines
 
 | Part | Technology |
 |---|---|
-| Frontend | HTML, CSS and plain JavaScript (runs in the browser, served by `frontend/dev-server.js` on port 5173) |
-| Backend | Node.js with Express (`backend/server.js`, port 3000) |
+| Frontend | HTML, CSS and plain JavaScript (runs in the browser, served by the backend at http://localhost:3000) |
+| Backend | Node.js with Express (`backend/server.js`, port 3000): serves the pages and the API (under `/api`) from one server |
 | Database | JSON files in `backend/data/`, read and written through `backend/storage.js` |
 
 ## Run it on your computer
@@ -17,38 +17,29 @@ Customers browse open production batches, order, and pick a pickup slot. Busines
 You need [Node.js](https://nodejs.org) (LTS version). Everything else is in this repository.
 
 1. **Download** the repository (green **Code** button, then **Download ZIP**) and unzip it. You get a folder called `BatchBite-main`.
-2. **Open a terminal in your Downloads folder** (or wherever you unzipped it):
-   - **Mac:** open Terminal and run `cd ~/Downloads`
-   - **Windows:** open Command Prompt and run `cd %USERPROFILE%\Downloads`
-3. **Install the backend packages:**
+2. **Open a terminal in that folder:**
+   - **Mac:** open Terminal and run `cd ~/Downloads/BatchBite-main`
+   - **Windows:** open Command Prompt and run `cd %USERPROFILE%\Downloads\BatchBite-main`
+3. **Install** (first time only):
    ```
-   cd BatchBite-main/backend
    npm install
    ```
-4. **Create the first Administrator account** (you choose the name, email and password):
+4. **Start BatchBite:**
    ```
-   cd ../frontend
-   node tools/create-admin.js ../backend/data
+   npm start
    ```
-   This also creates the database folder `backend/data` from `backend/data-template` the first time.
-5. **Start the backend** (leave this window open):
-   ```
-   cd ../backend
-   node server.js
-   ```
-   You should see `BatchBite server running at http://localhost:3000`.
-6. **Start the frontend** in a second terminal window. Go to the Downloads folder again as in step 2, then:
-   ```
-   cd BatchBite-main/frontend
-   node dev-server.js
-   ```
-7. **Open http://localhost:5173** in your browser and log in with the Administrator account from step 4. The application is ready to use; nothing else needs to be run.
+   You should see `Open http://localhost:3000 in your browser`. Leave this window open while you use the app.
+5. **Open http://localhost:3000** in your browser.
+   - The **first time**, BatchBite asks you to create the **Administrator** account (name, email and password). After that it signs you in.
+   - From then on, everything is done in the browser. You don't need the terminal again until you want to stop the app (press **Ctrl+C** in that window).
+
+One server runs everything: it shows the pages and handles the data. The database folder `backend/data` is created automatically the first time.
 
 **If something goes wrong**
 - `no such file or directory` or `Could not read package.json`: the terminal is in the wrong folder. Go back to step 2.
 - `npm` or `node` not found: install Node.js (LTS) and open a new terminal.
-- `EADDRINUSE` (port already in use): BatchBite is already running in another window. Close that window or use it.
-- The page shows "backend is not running": start the backend (step 5) and keep its window open.
+- `EADDRINUSE` (port already in use): BatchBite is already running in another window. Use that one, or close it and run `npm start` again.
+- The page doesn't load: check that the `npm start` window is still open.
 
 ## Roles and test accounts
 
@@ -66,7 +57,7 @@ New accounts are created as **Customer**. Only an Administrator can change a rol
 
 ## Try the full order journey (about 10 minutes)
 
-After step 7 above:
+After step 5 above:
 
 1. **Register three accounts** on the sign-up page (for example an owner, a kitchen user and a customer). As the **Administrator**, open **Users** and make one a **Business Owner** and one **Kitchen Staff**.
 2. **Business Owner:** open **Products & Batches** and add a product with a variant. Click **Recipe** on the product to list its ingredients (optional: products without a recipe can still be ordered, they just don't reserve ingredient stock). Then create a batch with an order deadline and pickup date.
@@ -103,9 +94,9 @@ All saved data lives in **`backend/data/`** as one JSON file per collection:
 | `notifications.json`, `stockHolds.json`, `productionTasks.json` | Notifications, temporary stock holds, kitchen tasks |
 | `sessions.json` | Login sessions. **Never share or commit this file.** |
 
-**To look at the data:** open any file in a text editor, or open these links in your browser while the backend is running: `http://localhost:3000/products`, `/batches` and `/pickupSlots`.
+**To look at the data:** open any file in a text editor, or open these links in your browser while BatchBite is running: `http://localhost:3000/api/products`, `/api/batches` and `/api/pickupSlots`.
 
-**To start again from nothing:** stop the backend, delete `backend/data`, then repeat step 4 above (the backend creates a fresh `data` folder by itself).
+**To start again from nothing:** stop the backend, delete `backend/data`, then run `npm start` again. BatchBite creates a fresh `data` folder and asks for a new Administrator.
 
 `backend/data/` holds real accounts and sessions, so it should not be uploaded to GitHub. Add `backend/data/` to a `.gitignore` file.
 
