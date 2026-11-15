@@ -20,6 +20,17 @@ const readline = require('readline');
 const dataDir = path.resolve(process.argv[2] || '../backend/data');
 const usersFile = path.join(dataDir, 'users.json');
 
+// First run: create the data folder from ../data-template if it doesn't exist yet
+// (the backend does the same when it starts), so no copy step is needed.
+const templateDir = path.join(path.dirname(dataDir), 'data-template');
+if (!fs.existsSync(usersFile) && fs.existsSync(templateDir)) {
+  fs.mkdirSync(dataDir, { recursive: true });
+  for (const file of fs.readdirSync(templateDir)) {
+    const target = path.join(dataDir, file);
+    if (!fs.existsSync(target)) fs.copyFileSync(path.join(templateDir, file), target);
+  }
+}
+
 if (!fs.existsSync(usersFile)) {
   console.error('Could not find ' + usersFile);
   console.error('Usage: node tools/create-admin.js <path to backend data folder>');
