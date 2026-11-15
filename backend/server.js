@@ -329,6 +329,63 @@ app.put("/admin/users/:id", (req, res) => {
 });
 
 
+// Administrator: permanently delete an account.
+// Accounts that already have orders, business records or kitchen tasks are
+// not deleted (so order history stays complete); deactivate those instead.
+app.delete("/admin/users/:id", (req, res) => {
+    const admin = getLoggedInUser(req);
+
+    if (!admin || admin.role !== "Administrator") {
+        return res.status(403).json({
+            error: "Only administrators can manage users"
+        });
+    }
+
+    const users = readData("users");
+    const userId = Number(req.params.id);
+
+    const user = users.find(u => u.id === userId);
+
+    if (!user) {
+        return res.status(404).json({
+            error: "User not found"
+        });
+    }
+
+    if (user.id === admin.id) {
+        return res.status(400).json({
+            error: "Administrator cannot delete their own account"
+        });
+    }
+
+    const linkedRecords =
+        readData("orders").some(o => o.customerId === userId) ||
+        ["products", "batches", "pickupSlots", "ingredients", "recipes"]
+            .some(name => readData(name).some(item => item.ownerId === userId)) ||
+        readData("productionTasks").some(t => t.assignedTo === userId);
+
+    if (linkedRecords) {
+        return res.status(409).json({
+            error: "This account has orders or business records, so it cannot be deleted. Deactivate it instead."
+        });
+    }
+
+    writeData("users", users.filter(u => u.id !== userId));
+    writeData("sessions", readData("sessions").filter(s => s.userId !== userId));
+    writeData("notifications", readData("notifications").filter(n => n.userId !== userId));
+
+    res.json({
+        message: "User deleted successfully",
+        user: {
+            id: user.id,
+            name: user.name,
+            email: user.email,
+            role: user.role
+        }
+    });
+});
+
+
 app.get("/users", requireRole("Administrator"), (req, res) => {
     const users = readData("users");
 
@@ -734,10 +791,10 @@ for (const item of orderItems) {
         r.isActive === true
     );
 
-    if (!recipe || recipe.yieldQuantity <= 0) {
-        return res.status(400).json({
-            error: "Active recipe not found"
-        });
+    // Products without a recipe can still be ordered; they simply do not
+    // reserve ingredient stock. Business Owners add recipes on the Products page.
+    if (!recipe || !(recipe.yieldQuantity > 0) || !Array.isArray(recipe.ingredients)) {
+        continue;
     }
 
     for (const recipeItem of recipe.ingredients) {
@@ -2053,6 +2110,122 @@ app.get("/recipes", requireRole("BusinessOwner", "KitchenStaff"), (req, res) => 
     res.json(recipes);
 });
 
+
+// Business Owner: create or replace the recipe for one product variant.
+// The previous recipe is kept but marked inactive, so confirmed orders keep
+// the recipe version they were placed with (FR-23).
+app.post("/recipes", requireRole("BusinessOwner"), (req, res) => {
+    const owner = req.loggedInUser;
+    const recipes = readData("recipes");
+    const products = readData("products");
+    const ingredients = readData("ingredients");
+
+    const productId = req.body.productId;
+    const variantId = req.body.variantId;
+    const yieldQuantity = req.body.yieldQuantity;
+    const items = req.body.ingredients;
+
+    const product = products.find(p =>
+        p.id === productId &&
+        p.ownerId === owner.id
+    );
+
+    if (!product) {
+        return res.status(404).json({
+            error: "Product not found for this owner"
+        });
+    }
+
+    const variant = (product.variants || []).find(v => v.id === variantId);
+
+    if (!variant) {
+        return res.status(400).json({
+            error: "Variant not found"
+        });
+    }
+
+    if (typeof yieldQuantity !== "number" ||
+        !Number.isFinite(yieldQuantity) ||
+        yieldQuantity <= 0) {
+        return res.status(400).json({
+            error: "The recipe must make at least 1 item"
+        });
+    }
+
+    if (!Array.isArray(items) || items.length === 0) {
+        return res.status(400).json({
+            error: "Add at least one ingredient"
+        });
+    }
+
+    const seen = new Set();
+    const recipeIngredients = [];
+
+    for (const item of items) {
+        const ingredient = ingredients.find(i =>
+            i.id === item.ingredientId &&
+            i.ownerId === owner.id
+        );
+
+        if (!ingredient ||
+            typeof item.quantity !== "number" ||
+            !Number.isFinite(item.quantity) ||
+            item.quantity <= 0) {
+            return res.status(400).json({
+                error: "Each ingredient needs a positive quantity"
+            });
+        }
+
+        if (seen.has(ingredient.id)) {
+            return res.status(400).json({
+                error: "Each ingredient can only be listed once"
+            });
+        }
+
+        seen.add(ingredient.id);
+
+        recipeIngredients.push({
+            ingredientId: ingredient.id,
+            quantity: item.quantity,
+            unit: ingredient.unit
+        });
+    }
+
+    const previous = recipes.filter(r =>
+        r.ownerId === owner.id &&
+        r.productId === productId &&
+        r.variantId === variantId
+    );
+
+    for (const old of previous) {
+        old.isActive = false;
+    }
+
+    const newId = recipes.length > 0
+        ? Math.max(...recipes.map(r => r.id)) + 1
+        : 1;
+
+    const recipe = {
+        id: newId,
+        ownerId: owner.id,
+        name: product.name + " (" + variant.name + ")",
+        productId: productId,
+        variantId: variantId,
+        version: previous.length + 1,
+        yieldQuantity: yieldQuantity,
+        ingredients: recipeIngredients,
+        isActive: true,
+        createdAt: new Date().toISOString()
+    };
+
+    recipes.push(recipe);
+    writeData("recipes", recipes);
+
+    res.status(201).json({
+        message: "Recipe saved",
+        recipe: recipe
+    });
+});
 
 app.get("/recipes/:id/calculate", requireRole("BusinessOwner", "KitchenStaff"), (req, res) => {
     const recipes = readData("recipes");

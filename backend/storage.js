@@ -16,6 +16,31 @@ const allowedFiles = [
     "sessions"
 ];
 
+const dataDir = path.join(__dirname, "data");
+const templateDir = path.join(__dirname, "data-template");
+
+// First run: create the data folder from data-template, so no copy step is needed.
+// Existing data is never overwritten; only missing files are added.
+function ensureDataFolder() {
+    if (!fs.existsSync(dataDir)) {
+        fs.mkdirSync(dataDir, { recursive: true });
+    }
+
+    for (const name of allowedFiles) {
+        const target = path.join(dataDir, name + ".json");
+
+        if (!fs.existsSync(target)) {
+            const template = path.join(templateDir, name + ".json");
+            const content = fs.existsSync(template)
+                ? fs.readFileSync(template, "utf8")
+                : "[]";
+            fs.writeFileSync(target, content);
+        }
+    }
+}
+
+ensureDataFolder();
+
 function readData(fileName) {
     if (!allowedFiles.includes(fileName)) {
         throw new Error("Invalid data file");
@@ -39,6 +64,7 @@ function writeData(fileName, data) {
 }
 
 module.exports = {
+    ensureDataFolder,
     readData,
     writeData
 };
