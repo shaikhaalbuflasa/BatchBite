@@ -8,7 +8,7 @@ Each module was tested in Google Chrome with the frontend connected to the team 
 | Products, batches and ordering | Shaikha | 13, see the Phase 2 report | All pass |
 | Pickup and order management | Marwa | 24 (PO-01 to PO-24), below | All pass |
 | Kitchen dashboard and notifications | Aaya | see `frontend/KITCHEN-MODULE.md` | |
-| Full journey and setup (integration) | Team | 12 (IT-01 to IT-12), below | All pass |
+| Full journey and setup (integration) | Team | 15 (IT-01 to IT-15), below | All pass |
 
 ## Pickup and Order Management (Marwa)
 
@@ -47,8 +47,8 @@ Tested on 15 November 2026 by downloading the repository, following the README e
 
 | ID | Test case | Input / steps | Expected result | Result |
 |---|---|---|---|---|
-| IT-01 | Setup without copy step | `npm install`, `create-admin.js`, start backend and frontend | `backend/data` created automatically from `data-template`; app opens at http://localhost:5173 | Pass |
-| IT-02 | Backend started first | Start `server.js` with no `data` folder | Data folder created on start; no crash | Pass |
+| IT-01 | One-command start | In the repository folder: `npm install`, then `npm start` | One server; app opens at http://localhost:3000; `backend/data` created automatically | Pass |
+| IT-02 | First-run setup in the browser | Open http://localhost:3000 on a fresh download | Setup page opens; Administrator created and signed in; no terminal step | Pass |
 | IT-03 | Roles from the app | Register 3 users; Administrator sets Business Owner and Kitchen Staff in Users | Roles saved; each role sees only its tools; no "Being integrated" cards | Pass |
 | IT-04 | Recipe in the app | Owner clicks Recipe, adds Flour 300 g and Chocolate 200 g, makes 6 | Recipe saved; new ingredients added with their stock; card shows "Recipe added" | Pass |
 | IT-05 | Recipe validation | New ingredient with no stock entered | "Enter how much Chocolate you have in stock"; nothing saved | Pass |
@@ -59,3 +59,6 @@ Tested on 15 November 2026 by downloading the repository, following the README e
 | IT-10 | Stock released on cancel (FR-11) | Customer cancels an order with a recipe | Reserved ingredients released | Pass |
 | IT-11 | Production task priority | Kitchen adds a High task, changes it to Low, completes it | Saved with each change; status Completed | Pass |
 | IT-12 | Data kept between sessions | Restart the backend | Users, products, orders and tasks still there (`backend/data`) | Pass |
+| IT-13 | Setup closes after first use | Open setup.html again, or call POST /api/setup/admin when an Administrator exists | Sent to Log in; backend refuses (403) | Pass |
+| IT-14 | Setup validation | Short password, bad email, passwords that don't match | Error under the right field; nothing saved | Pass |
+| IT-15 | Developer files hidden | Open /tools/create-admin.js and /dev-server.js in the browser | Not found (404) | Pass |
