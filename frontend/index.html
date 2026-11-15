@@ -13,8 +13,12 @@
   <script src="js/storage.js"></script>
   <script src="js/auth.js"></script>
   <script>
-    // Entry point: signed-in users go to Home, everyone else to Log in
-    location.replace(Auth.currentUser() ? 'home.html' : 'login.html');
+    // Entry point: a fresh install goes to first-run setup; signed-in users go
+    // to Home; everyone else to Log in
+    Api.request('/setup/status')
+      .then(status => status.needsAdministrator ? 'setup.html' : null)
+      .catch(() => null)
+      .then(setup => location.replace(setup || (Auth.currentUser() ? 'home.html' : 'login.html')));
   </script>
 </body>
 </html>

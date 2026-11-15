@@ -2,26 +2,10 @@
 
 Covers **FR-1, FR-2, FR-3, FR-21** and **NFR-3 (Security)**. Connected to the backend in `backend/server.js`.
 
-## Run it (two terminals)
-1. **Backend** (first time only: `npm install` and `cp -R data-template data`):
-   ```
-   cd backend
-   node server.js            # http://localhost:3000
-   ```
-2. **First Administrator** (only once, on a new `data` folder, with the backend stopped):
-   ```
-   cd frontend
-   node tools/create-admin.js ../backend/data
-   ```
-   The backend only lets people register as Customers and only an Administrator can change roles, so the first Administrator is created with this script. The password is hashed exactly like `server.js` and is never printed or saved in plain text.
-3. **Frontend**:
-   ```
-   cd frontend
-   node dev-server.js        # http://localhost:5173
-   ```
-   `dev-server.js` serves the pages and forwards every `/api/...` request to the backend, so the browser never hits a CORS error and `server.js` does not need to change. No npm packages are needed.
+## Run it
+From the repository folder: `npm install` (first time), then `npm start`, and open **http://localhost:3000**. One server shows the pages and handles the API.
 
-Open http://localhost:5173, log in as the Administrator, then give other registered users the Business Owner or Kitchen Staff role from **Manage users**.
+On a fresh database the app opens a **first-run setup page** to create the first Administrator in the browser (`GET /setup/status`, `POST /setup/admin`; closed once an Administrator exists). `tools/create-admin.js` still works as an alternative from the terminal.
 
 ## Backend routes used
 | Route | Used for |
