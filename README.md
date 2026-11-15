@@ -59,7 +59,7 @@ BatchBite has four roles. On the login page, choose **Who are you?** and then lo
 After step 5 above:
 
 1. **Business Owner:** click **Switch**, then **Log in to another account**. Choose **Business Owner**, click **Sign up**, create the account and log in. Open **Kitchen Staff** and create a login for a kitchen team member.
-2. **Business Owner:** open **Products & Batches** and add a product with a variant. Click **Recipe** on the product to list its ingredients (optional: products without a recipe can still be ordered, they just don't reserve ingredient stock). Then create a batch with an order deadline and pickup date.
+2. **Business Owner:** open **Products & Batches** and add a product with a variant (click **Upload photo** to add a picture). Click **Recipe** on the product to list its ingredients (optional: products without a recipe can still be ordered, they just don't reserve ingredient stock). Then create a batch with an order deadline and pickup date.
 3. **Business Owner:** open **Pickup Slots** and add one or two pickup times for the batch.
 4. **Business Owner (optional):** open **Ingredients** to see stock and use the recipe calculator.
 5. **Customer:** click **Switch**, then **Log in to another account**. Choose **Customer**, click **Sign up**, create the account and log in. Open **Browse Batches**, add items to the cart, choose a pickup slot and check out.
@@ -71,7 +71,7 @@ After step 5 above:
 
 - Register, log in, role-based access (Malaak). Login asks **Who are you?**; Customers and Business Owners can sign up, Kitchen Staff accounts are created by their Business Owner, and **Switch** moves between signed-in accounts in one click
 - Backend API with JSON persistence, orders, stock and ingredient checks (Nehad)
-- **Products:** add, edit, hide and delete products with variants, prices, stock, description and ingredients (Shaikha). Each variant can have a **recipe** (ingredients and amounts) entered from the product card; saving a new recipe keeps the old version for orders already placed
+- **Products:** add, edit, hide and delete products with variants, prices, stock, description, ingredients and an **uploaded photo** (resized automatically and shown to customers in Browse Batches) (Shaikha). Each variant can have a **recipe** (ingredients and amounts) entered from the product card; saving a new recipe keeps the old version for orders already placed
 - **Batches:** create batches with an order deadline, pickup date and maximum quantity per product. A batch closes automatically at its deadline or when full (Shaikha)
 - **Catalogue and ordering:** browse open batches, cart, pickup slot choice, simulated card payment, order confirmation, no overselling (Shaikha)
 - **Pickup slots:** Business Owners add pickup times for each batch with a maximum number of orders. Overlapping or duplicate times are refused, and a slot can't be chosen once it is full (Marwa)
