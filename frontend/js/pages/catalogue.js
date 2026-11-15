@@ -27,7 +27,7 @@
       (b.products || []).map(i => {
         const { p, v } = find(i.productId, i.variantId); if (!p || !v || p.isAvailable === false) return '';
         const left = i.maxQuantity - (i.orderedQuantity || 0);
-        return '<div class="line"><span><strong>' + E(p.name) + '</strong> (' + E(v.name) + ')<br><span class="muted small">' + E(p.description || '') + '</span></span><span class="row-gap" style="align-items:center"><span>' + money(v.price) + '<br><span class="muted small">' + (left > 0 ? left + ' left' : 'Sold out') + '</span></span>' +
+        return '<div class="line"><span class="line-product">' + ProductPhoto.img(p.image, p.name, 'line-photo') + '<span><strong>' + E(p.name) + '</strong> (' + E(v.name) + ')<br><span class="muted small">' + E(p.description || '') + '</span></span></span><span class="row-gap" style="align-items:center"><span>' + money(v.price) + '<br><span class="muted small">' + (left > 0 ? left + ' left' : 'Sold out') + '</span></span>' +
           (left > 0 ? '<input type="number" min="1" max="' + left + '" value="1" id="q-' + b.id + '-' + i.productId + '-' + i.variantId + '"><button class="btn btn-primary btn-sm" data-add="' + b.id + '|' + i.productId + '|' + i.variantId + '|' + left + '">Add</button>' : '') + '</span></div>';
       }).join('') + '</div>').join('') : '<div class="card empty">No batches are open right now. Please check back soon.</div>') +
       '</div><div class="cart-bar">' + cartHtml(cart) + '</div></div>';

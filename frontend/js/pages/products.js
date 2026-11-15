@@ -22,7 +22,7 @@
 
   function draw() {
     root.innerHTML = '<h2>My products</h2>' + (prods.length ? '<div class="shop-grid">' + prods.map(p =>
-      '<div class="card"><h3>' + E(p.name) + ' <span class="pill ' + (p.isAvailable === false ? 'off' : '') + '">' + (p.isAvailable === false ? 'Hidden' : 'Available') + '</span></h3>' +
+      '<div class="card">' + ProductPhoto.img(p.image, p.name, 'product-photo') + '<h3>' + E(p.name) + ' <span class="pill ' + (p.isAvailable === false ? 'off' : '') + '">' + (p.isAvailable === false ? 'Hidden' : 'Available') + '</span></h3>' +
       '<p class="muted small">' + E(p.description || 'No description yet.') + '</p>' +
       (p.variants || []).map(v => '<div class="line"><span>' + E(v.name) + '<br><span class="small ' + (RecipeEditor.activeRecipe(recipes, p.id, v.id) ? 'muted' : 'recipe-missing') + '">' + (RecipeEditor.activeRecipe(recipes, p.id, v.id) ? 'Recipe added' : 'No recipe yet') + '</span></span><span>BD ' + Number(v.price).toFixed(2) + ' &middot; ' + E(v.quantity) + ' in stock</span></div>').join('') +
       '<div class="row-gap" style="margin-top:.8rem"><button class="btn btn-secondary btn-sm" data-edit="' + p.id + '">Edit</button><button class="btn btn-secondary btn-sm" data-recipe="' + p.id + '">Recipe</button><button class="btn btn-secondary btn-sm" data-toggle="' + p.id + '">' + (p.isAvailable === false ? 'Show in catalogue' : 'Hide') + '</button><button class="btn btn-danger-ghost btn-sm" data-del="' + p.id + '">Delete</button></div></div>').join('') + '</div>'
@@ -46,11 +46,11 @@
   });
   async function productForm(p) {
     const v = p ? (p.variants || []).map(x => [x.name, x.price, x.quantity].join(', ')).join('\n') : '';
-    await UI.modal({
+    const pending = UI.modal({
       title: p ? 'Edit product' : 'Add product', confirmText: 'Save product',
       bodyHtml: '<div class="field"><label>Name</label><input type="text" name="name" value="' + E(p ? p.name : '') + '"><div class="field-error" data-error-for="name"></div></div>' +
         '<div class="field"><label>Description and ingredients</label><textarea name="description" rows="3">' + E(p ? p.description : '') + '</textarea></div>' +
-        '<div class="field"><label>Picture link (optional)</label><input type="text" name="image" value="' + E(p ? p.image : '') + '"></div>' +
+        ProductPhoto.fieldHtml(p ? p.image : '') +
         '<div class="field"><label>Variants, one per line: name, price, quantity</label><textarea name="variants" rows="3" placeholder="Box of 6, 4.5, 20">' + E(v) + '</textarea><div class="field-error" data-error-for="variants"></div></div>',
       onSubmit: async form => {
         const f = UI.formData(form), vars = parseVariants(f.variants || '');
@@ -63,7 +63,9 @@
           return { ok: true };
         } catch (err) { return { ok: false, error: err.message }; }
       }
-    }).then(ok => { if (ok) { UI.toast('Product saved.'); load(); } });
+    });
+    ProductPhoto.wire(document.querySelector('.modal form'));   // photo upload, preview and remove
+    await pending.then(ok => { if (ok) { UI.toast('Product saved.'); load(); } });
   }
   async function toggle(p) {
     try { await api('/products/' + p.id, { method: 'PUT', body: { name: p.name, description: p.description, image: p.image, variants: p.variants, isAvailable: p.isAvailable === false } }); load(); }
