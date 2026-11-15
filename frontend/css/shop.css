@@ -5,3 +5,12 @@ input[type=number],input[type=date],input[type=datetime-local],textarea{width:10
 .line input[type=number]{width:5.5rem}.row-gap{display:flex;gap:.5rem;flex-wrap:wrap}.cart-bar{position:sticky;top:.5rem}
 .layout-2{display:grid;grid-template-columns:2fr 1fr;gap:1.25rem;align-items:start}@media(max-width:860px){.layout-2{grid-template-columns:1fr}}
 .pill{display:inline-block;padding:.1em .6em;border-radius:99px;font-size:.75rem;font-weight:600;background:var(--butter-yellow);color:var(--primary-ink)}.pill.off{background:var(--line)}
+/* Product photos (upload on Products page, shown on product cards and in Browse Batches) */
+.product-photo{display:block;width:calc(100% + 2.8rem);margin:-1.4rem -1.4rem 1rem;height:170px;object-fit:cover;border-radius:var(--radius) var(--radius) 0 0;background:var(--vanilla-cream)}
+.no-photo{display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:.8rem;background:var(--vanilla-cream)}
+.line-product{display:flex;gap:.75rem;align-items:center}
+.line-photo{width:64px;height:64px;flex-shrink:0;object-fit:cover;border-radius:var(--radius-sm);border:1px solid var(--line)}
+.photo-row{display:flex;gap:.9rem;align-items:center}
+.photo-thumb{width:96px;height:96px;object-fit:cover;border-radius:var(--radius-sm);border:1px solid var(--line-strong);flex-shrink:0}
+.photo-actions{display:flex;flex-direction:column;align-items:flex-start;gap:.35rem}
+.photo-pick{cursor:pointer}
