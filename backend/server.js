@@ -2937,4 +2937,22 @@ app.listen(PORT, () => {
     console.log("BatchBite is running.");
     console.log("Open http://localhost:" + PORT + " in your browser.");
     console.log("Keep this window open while you use the app. Press Ctrl+C to stop.");
+
+    // Open the app in the default browser (set BATCHBITE_NO_BROWSER=1 to skip)
+    if (!process.env.BATCHBITE_NO_BROWSER) {
+        const url = "http://localhost:" + PORT;
+        const command = process.platform === "darwin" ? "open"
+            : process.platform === "win32" ? "cmd"
+            : "xdg-open";
+        const args = process.platform === "win32" ? ["/c", "start", "", url] : [url];
+
+        try {
+            require("child_process")
+                .spawn(command, args, { stdio: "ignore", detached: true })
+                .on("error", () => { /* no browser available: open the address by hand */ })
+                .unref();
+        } catch (err) {
+            // Opening the browser is only a convenience; the app keeps running
+        }
+    }
 });
