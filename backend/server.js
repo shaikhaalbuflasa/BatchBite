@@ -309,6 +309,17 @@ app.post("/register", (req, res) => {
         });
     }
 
+    // People can sign up as a Customer (default) or a Business Owner.
+    // Kitchen Staff accounts are created by a Business Owner, and the
+    // Administrator is created on the first-run setup page.
+    const accountType = req.body.accountType === undefined ? "Customer" : req.body.accountType;
+
+    if (!["Customer", "BusinessOwner"].includes(accountType)) {
+        return res.status(400).json({
+            error: "You can sign up as a Customer or a Business Owner. Kitchen Staff accounts are created by their Business Owner."
+        });
+    }
+
     const normalizedEmail = email.trim().toLowerCase();
 
     const existingUser = users.find(user =>
@@ -330,7 +341,7 @@ app.post("/register", (req, res) => {
         name: name.trim(),
         email: normalizedEmail,
         passwordHash: hashPassword(password),
-        role: "Customer",
+        role: accountType,
         isActive: true
     };
 
@@ -459,7 +470,8 @@ app.delete("/admin/users/:id", (req, res) => {
         readData("orders").some(o => o.customerId === userId) ||
         ["products", "batches", "pickupSlots", "ingredients", "recipes"]
             .some(name => readData(name).some(item => item.ownerId === userId)) ||
-        readData("productionTasks").some(t => t.assignedTo === userId);
+        readData("productionTasks").some(t => t.assignedTo === userId) ||
+        readData("users").some(u => u.createdBy === userId);
 
     if (linkedRecords) {
         return res.status(409).json({
@@ -480,6 +492,101 @@ app.delete("/admin/users/:id", (req, res) => {
             role: user.role
         }
     });
+});
+
+
+// ---------------------------------------------------------------------------
+// Business Owner: Kitchen Staff accounts.
+// A Business Owner creates logins for their kitchen team; staff cannot sign
+// up themselves. createdBy links each staff account to its Business Owner.
+// ---------------------------------------------------------------------------
+function safeUser(user) {
+    return {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+        isActive: user.isActive
+    };
+}
+
+app.get("/owner/staff", requireRole("BusinessOwner"), (req, res) => {
+    const staff = readData("users").filter(u =>
+        u.role === "KitchenStaff" &&
+        u.createdBy === req.loggedInUser.id
+    );
+
+    res.json(staff.map(safeUser));
+});
+
+app.post("/owner/staff", requireRole("BusinessOwner"), (req, res) => {
+    const name = req.body.name;
+    const email = req.body.email;
+    const password = req.body.password;
+
+    if (typeof name !== "string" || name.trim().length < 2) {
+        return res.status(400).json({ error: "Enter the staff member's full name." });
+    }
+
+    if (typeof email !== "string" || !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email.trim())) {
+        return res.status(400).json({ error: "Enter a valid email address." });
+    }
+
+    if (typeof password !== "string" || password.length < 8) {
+        return res.status(400).json({ error: "Password must be at least 8 characters." });
+    }
+
+    const users = readData("users");
+    const normalizedEmail = email.trim().toLowerCase();
+
+    if (users.some(u => u.email.toLowerCase() === normalizedEmail)) {
+        return res.status(400).json({ error: "Email is already registered" });
+    }
+
+    const newId = users.length > 0
+        ? Math.max(...users.map(u => u.id)) + 1
+        : 1;
+
+    const staff = {
+        id: newId,
+        name: name.trim(),
+        email: normalizedEmail,
+        passwordHash: hashPassword(password),
+        role: "KitchenStaff",
+        isActive: true,
+        createdBy: req.loggedInUser.id
+    };
+
+    users.push(staff);
+    writeData("users", users);
+
+    res.status(201).json(safeUser(staff));
+});
+
+app.put("/owner/staff/:id", requireRole("BusinessOwner"), (req, res) => {
+    const users = readData("users");
+    const staff = users.find(u =>
+        u.id === Number(req.params.id) &&
+        u.role === "KitchenStaff" &&
+        u.createdBy === req.loggedInUser.id
+    );
+
+    if (!staff) {
+        return res.status(404).json({ error: "Staff member not found" });
+    }
+
+    if (typeof req.body.isActive !== "boolean") {
+        return res.status(400).json({ error: "isActive must be true or false" });
+    }
+
+    staff.isActive = req.body.isActive;
+    writeData("users", users);
+
+    if (!staff.isActive) {
+        writeData("sessions", readData("sessions").filter(s => s.userId !== staff.id));
+    }
+
+    res.json(safeUser(staff));
 });
 
 
