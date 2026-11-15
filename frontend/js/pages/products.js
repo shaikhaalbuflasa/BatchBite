@@ -6,11 +6,12 @@
   const E = UI.escape, api = (p, o) => Api.request(p, Object.assign({ token: Auth.token() }, o || {}));
   const list = r => Array.isArray(r) ? r : (r.products || r.batches || []);
   const root = document.getElementById('root');
-  let prods = [], bats = [];
+  let prods = [], bats = [], recipes = [];
 
   async function load() {
     try {
-      const [p, b] = await Promise.all([api('/products'), api('/batches')]);
+      const [p, b, r] = await Promise.all([api('/products'), api('/batches'), api('/recipes').catch(() => [])]);
+      recipes = Array.isArray(r) ? r : [];
       prods = list(p).filter(x => x.ownerId == me.id);
       bats = list(b).filter(x => x.ownerId == me.id);
       draw();
@@ -23,8 +24,8 @@
     root.innerHTML = '<h2>My products</h2>' + (prods.length ? '<div class="shop-grid">' + prods.map(p =>
       '<div class="card"><h3>' + E(p.name) + ' <span class="pill ' + (p.isAvailable === false ? 'off' : '') + '">' + (p.isAvailable === false ? 'Hidden' : 'Available') + '</span></h3>' +
       '<p class="muted small">' + E(p.description || 'No description yet.') + '</p>' +
-      (p.variants || []).map(v => '<div class="line"><span>' + E(v.name) + '</span><span>BD ' + Number(v.price).toFixed(2) + ' &middot; ' + E(v.quantity) + ' in stock</span></div>').join('') +
-      '<div class="row-gap" style="margin-top:.8rem"><button class="btn btn-secondary btn-sm" data-edit="' + p.id + '">Edit</button><button class="btn btn-secondary btn-sm" data-toggle="' + p.id + '">' + (p.isAvailable === false ? 'Show in catalogue' : 'Hide') + '</button><button class="btn btn-danger-ghost btn-sm" data-del="' + p.id + '">Delete</button></div></div>').join('') + '</div>'
+      (p.variants || []).map(v => '<div class="line"><span>' + E(v.name) + '<br><span class="small ' + (RecipeEditor.activeRecipe(recipes, p.id, v.id) ? 'muted' : 'recipe-missing') + '">' + (RecipeEditor.activeRecipe(recipes, p.id, v.id) ? 'Recipe added' : 'No recipe yet') + '</span></span><span>BD ' + Number(v.price).toFixed(2) + ' &middot; ' + E(v.quantity) + ' in stock</span></div>').join('') +
+      '<div class="row-gap" style="margin-top:.8rem"><button class="btn btn-secondary btn-sm" data-edit="' + p.id + '">Edit</button><button class="btn btn-secondary btn-sm" data-recipe="' + p.id + '">Recipe</button><button class="btn btn-secondary btn-sm" data-toggle="' + p.id + '">' + (p.isAvailable === false ? 'Show in catalogue' : 'Hide') + '</button><button class="btn btn-danger-ghost btn-sm" data-del="' + p.id + '">Delete</button></div></div>').join('') + '</div>'
       : '<div class="card empty">No products yet. Add your first product to get started.</div>') +
       '<div class="page-head" style="margin-top:2rem"><h2>My batches</h2><button class="btn btn-primary" id="new-batch">Create batch</button></div>' +
       (bats.length ? '<div class="shop-grid">' + bats.map(b =>
@@ -33,6 +34,7 @@
         (b.products || []).map(i => '<div class="line"><span>' + E(vname(i.productId, i.variantId)) + '</span><span>' + (i.orderedQuantity || 0) + ' / ' + i.maxQuantity + ' ordered</span></div>').join('') + '</div>').join('') + '</div>'
         : '<div class="card empty">No batches yet. Create a batch so customers can order.</div>');
     root.querySelectorAll('[data-edit]').forEach(b => b.onclick = () => productForm(prods.find(p => p.id == b.dataset.edit)));
+    root.querySelectorAll('[data-recipe]').forEach(b => b.onclick = async () => { if (await RecipeEditor.open(prods.find(p => p.id == b.dataset.recipe), me)) { UI.toast('Recipe saved.'); load(); } });
     root.querySelectorAll('[data-toggle]').forEach(b => b.onclick = () => toggle(prods.find(p => p.id == b.dataset.toggle)));
     root.querySelectorAll('[data-del]').forEach(b => b.onclick = () => del(prods.find(p => p.id == b.dataset.del)));
     document.getElementById('new-batch').onclick = batchForm;
