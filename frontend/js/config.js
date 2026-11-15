@@ -3,12 +3,9 @@
  * ----------------------------------
  * API_BASE is where the frontend sends API requests.
  *
- * "/api" works with dev-server.js, which serves these pages and forwards
- * every /api/... request to the backend (http://localhost:3000 by default).
- * This avoids browser CORS errors without changing the backend.
- *
- * If the backend later serves the frontend itself or enables CORS,
- * change this to the backend address, e.g. "http://localhost:3000".
+ * "/api" works with backend/server.js, which serves these pages and the API
+ * from one address (npm start -> http://localhost:3000). It also still works
+ * with the optional dev-server.js, which forwards /api requests to the backend.
  */
 window.BATCHBITE_CONFIG = {
   API_BASE: '/api'
