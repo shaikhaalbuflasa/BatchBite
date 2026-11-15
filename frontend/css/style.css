@@ -275,12 +275,34 @@ td select { padding: .4em .5em; font-size: .84rem; min-width: 150px; }
   .header-user-text { display: none; }
 }
 @media (max-width: 640px) {
-  .header-inner { flex-wrap: wrap; gap: .6rem; padding: .6rem 1rem; }
-  .nav { order: 3; width: 100%; overflow-x: auto; }
+  .header-inner { gap: .6rem; padding: .6rem 1rem; }
+  .nav { display: none; }
   .header-user { margin-left: auto; }
   .grid-2, .role-options { grid-template-columns: 1fr; }
   .auth-card { padding: 1.8rem 1.3rem; }
   main.container { padding: 1.4rem 1rem 3rem; }
+}
+
+/* ---------- bottom tab bar (phones, as in the Phase 1 wireframes) ---------- */
+#tab-bar { display: none; }
+@media (max-width: 640px) {
+  #tab-bar {
+    display: grid; grid-template-columns: repeat(var(--tabs, 4), 1fr);
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 20;
+    background: var(--white); border-top: 1px solid var(--line);
+    padding: .35rem .25rem calc(.35rem + env(safe-area-inset-bottom));
+    box-shadow: 0 -4px 14px rgba(121, 85, 72, .06);
+  }
+  #tab-bar a {
+    display: flex; flex-direction: column; align-items: center; gap: .15rem;
+    text-decoration: none; color: var(--muted); font-size: .7rem; font-weight: 500;
+    padding: .3rem .2rem; border-radius: 12px;
+  }
+  #tab-bar svg { width: 22px; height: 22px; }
+  #tab-bar a.active { color: var(--primary-ink); font-weight: 600; background: #fdf0f4; }
+  #tab-bar a.active svg { color: var(--strawberry); stroke: var(--primary-ink); }
+  body.has-tab-bar main.container { padding-bottom: 6rem; }
+  body.has-tab-bar #toasts { bottom: 5.2rem; }
 }
 
 /* ---------- server unreachable banner ---------- */
