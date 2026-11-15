@@ -5,7 +5,7 @@ const crypto = require("crypto");
 
 const app = express();
 
-app.use(express.json());
+app.use(express.json({ limit: "5mb" }));   // room for product photos (sent as small images)
 
 // ---------------------------------------------------------------------------
 // One server for the whole app.
