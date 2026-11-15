@@ -14,6 +14,11 @@
     return;
   }
 
+  // Fresh install with no Administrator yet: go to first-run setup instead
+  Api.request('/setup/status')
+    .then(status => { if (status.needsAdministrator) location.replace('setup.html'); })
+    .catch(() => { /* server unreachable: the login form shows the error on submit */ });
+
   const notice = document.getElementById('notice');
   const messages = {
     loggedOut: 'You have been logged out.',
