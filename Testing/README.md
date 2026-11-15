@@ -10,6 +10,7 @@ Each module was tested in Google Chrome with the frontend connected to the team 
 | Kitchen dashboard and notifications | Aaya | see `frontend/KITCHEN-MODULE.md` | |
 | Full journey and setup (integration) | Team | 15 (IT-01 to IT-15), below | All pass |
 | Roles, sign-up and switching accounts | Team | 12 (RS-01 to RS-12), below | All pass |
+| Product photos | Team | 4 (PH-01 to PH-04), below | All pass |
 
 ## Pickup and Order Management (Marwa)
 
@@ -80,3 +81,12 @@ Tested on 15 November 2026 by downloading the repository, following the README e
 | RS-10 | Sign-up rules (server) | POST /register as KitchenStaff or Administrator | Refused (400) | Pass |
 | RS-11 | Staff page rules (server) | Customer token calls POST /owner/staff | Refused (403) | Pass |
 | RS-12 | Log out | Log out of one account, open Switch | That account is no longer listed; others still are | Pass |
+
+## Product photos
+
+| ID | Test case | Input / steps | Expected result | Result |
+|---|---|---|---|---|
+| PH-01 | Upload a photo | Add product, click Upload photo, choose a 1.4 MB PNG | Preview shown; photo resized in the browser to about 110 KB and saved with the product | Pass |
+| PH-02 | Photo on product card | Save the product | Photo shown at the top of the product card | Pass |
+| PH-03 | Wrong file type | Choose a .txt file | "Choose a photo (JPG, PNG or WebP)"; the current photo is kept | Pass |
+| PH-04 | Customer view | Customer opens Browse Batches | Photo shown next to the product | Pass |
