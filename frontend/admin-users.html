@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manage users | BatchBite</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header id="app-header"></header>
+
+  <main class="container">
+    <div class="page-head">
+      <div>
+        <h1>Manage users</h1>
+        <p>Assign each user's role, activate or deactivate accounts, and delete accounts that are no longer needed.</p>
+      </div>
+      <button type="button" class="btn btn-secondary" id="refresh-btn">Refresh</button>
+    </div>
+
+    <section class="stats" id="stats" aria-label="Account summary"></section>
+
+    <div class="toolbar">
+      <input type="search" id="search" placeholder="Search by name or email" aria-label="Search users">
+      <select id="filter-role" aria-label="Filter by role">
+        <option value="">All roles</option>
+      </select>
+      <select id="filter-status" aria-label="Filter by status">
+        <option value="">All statuses</option>
+        <option value="active">Active</option>
+        <option value="inactive">Inactive</option>
+      </select>
+      <select id="sort" aria-label="Sort users">
+        <option value="level">Sort: access level</option>
+        <option value="name">Sort: name A-Z</option>
+        <option value="newest">Sort: newest first</option>
+      </select>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>User</th>
+            <th>User ID</th>
+            <th>Role</th>
+            <th>Account status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="user-rows">
+          <tr><td colspan="5" class="loading">Loading accounts...</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="muted small" id="result-count" style="margin-top:.6rem"></p>
+  </main>
+
+  <script src="js/config.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/pages/admin-users.js"></script>
+</body>
+</html>

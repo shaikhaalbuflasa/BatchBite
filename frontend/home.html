@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Home | BatchBite</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header id="app-header"></header>
+
+  <main class="container">
+    <div class="welcome">
+      <span class="avatar lg" id="welcome-avatar"></span>
+      <div>
+        <h1 id="welcome-title">Welcome</h1>
+        <p class="muted" id="welcome-role" style="margin:0"></p>
+      </div>
+    </div>
+
+    <h2>Your BatchBite tools</h2>
+    <p class="muted">You only see the features your role is allowed to use.</p>
+    <div class="module-grid" id="modules"></div>
+  </main>
+
+  <script src="js/config.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/pages/home.js"></script>
+</body>
+</html>
