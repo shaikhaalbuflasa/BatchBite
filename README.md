@@ -41,36 +41,35 @@ One server runs everything: it shows the pages and handles the data. The databas
 - `EADDRINUSE` (port already in use): BatchBite is already running in another window. Use that one, or close it and run `npm start` again.
 - The page doesn't load: check that the `npm start` window is still open.
 
-## Roles and test accounts
+## Roles and accounts
 
-New accounts are created as **Customer**. Only an Administrator can change a role.
+BatchBite has four roles. On the login page, choose **Who are you?** and then log in.
 
-1. Log in as the Administrator, open **Users**, and change a user's role to **Business Owner** or **Kitchen Staff**.
-2. Log in as that user. Each role sees only its own tools on the home page.
+| Role | How they get an account | What they can do |
+|---|---|---|
+| Administrator | Created on the first-run setup page the first time BatchBite opens | View all accounts, change roles, activate, deactivate or delete accounts |
+| Business Owner | **Sign up** (choose Business Owner) | Products, recipes and batches, pickup slots, Owner Dashboard (all orders, pickup check), **Kitchen Staff** page to create logins for their team, ingredients, Kitchen Dashboard |
+| Kitchen Staff | Created by their Business Owner on the **Kitchen Staff** page (no sign-up) | Kitchen Dashboard (order status, delay notices, preparation groups, production tasks, pickup verification), ingredients and recipe calculator |
+| Customer | **Sign up** (choose Customer) | Browse open batches, cart, pickup slot, checkout, My Orders (track, change, cancel, QR pickup code) |
 
-| Role | What they can do |
-|---|---|
-| Administrator | View users, change roles, activate or deactivate and delete accounts |
-| Business Owner | Create products and batches, create pickup slots, see all orders and verify pickups on the Owner Dashboard, manage ingredient stock, use the Kitchen Dashboard for their own orders |
-| Customer | Browse open batches, use the cart, choose a pickup slot, place an order, track, change or cancel orders and show the pickup QR code |
-| Kitchen Staff | Kitchen Dashboard (order status, delay notices, preparation groups, production tasks, pickup verification), ingredient and recipe calculator |
+**Switching between roles:** click **Switch** in the top bar. It lists every account you have signed in to on this browser, so you can jump between the Administrator, Business Owner, Kitchen Staff and Customer views in one click, or choose **Log in to another account**.
 
 ## Try the full order journey (about 10 minutes)
 
 After step 5 above:
 
-1. **Register three accounts** on the sign-up page (for example an owner, a kitchen user and a customer). As the **Administrator**, open **Users** and make one a **Business Owner** and one **Kitchen Staff**.
+1. **Business Owner:** click **Switch**, then **Log in to another account**. Choose **Business Owner**, click **Sign up**, create the account and log in. Open **Kitchen Staff** and create a login for a kitchen team member.
 2. **Business Owner:** open **Products & Batches** and add a product with a variant. Click **Recipe** on the product to list its ingredients (optional: products without a recipe can still be ordered, they just don't reserve ingredient stock). Then create a batch with an order deadline and pickup date.
 3. **Business Owner:** open **Pickup Slots** and add one or two pickup times for the batch.
 4. **Business Owner (optional):** open **Ingredients** to see stock and use the recipe calculator.
-5. **Customer:** open **Browse Batches**, add items to the cart, choose a pickup slot and check out.
+5. **Customer:** click **Switch**, then **Log in to another account**. Choose **Customer**, click **Sign up**, create the account and log in. Open **Browse Batches**, add items to the cart, choose a pickup slot and check out.
 6. **Customer:** open **My Orders**. Try **Change quantity**, **Cancel order** on a second order, and **Show pickup code**.
-7. **Business Owner:** open **Owner Dashboard**. Mark the order **Preparing**, then **Ready**, then click **Verify pickup** and paste the customer's code. The order becomes **Collected** on both screens.
-8. **Kitchen Staff:** open **Kitchen Dashboard** to move orders through Preparing and Ready, add production tasks with Low, Medium or High priority and mark them complete, and send delay notices. **Notifications** shows each user their order updates.
+7. **Business Owner:** click **Switch** and pick the Business Owner. Open **Owner Dashboard**. Mark the order **Preparing**, then **Ready**, then click **Verify pickup** and paste the customer's code. The order becomes **Collected** on both screens.
+8. **Kitchen Staff:** click **Switch**, then **Log in to another account**, choose **Kitchen Staff** and use the login the Business Owner created. Open **Kitchen Dashboard** to move orders through Preparing and Ready, add production tasks with Low, Medium or High priority and mark them complete, and send delay notices. **Notifications** shows each user their order updates.
 
 ## Features in this phase
 
-- Register, log in, role-based access (Malaak)
+- Register, log in, role-based access (Malaak). Login asks **Who are you?**; Customers and Business Owners can sign up, Kitchen Staff accounts are created by their Business Owner, and **Switch** moves between signed-in accounts in one click
 - Backend API with JSON persistence, orders, stock and ingredient checks (Nehad)
 - **Products:** add, edit, hide and delete products with variants, prices, stock, description and ingredients (Shaikha). Each variant can have a **recipe** (ingredients and amounts) entered from the product card; saving a new recipe keeps the old version for orders already placed
 - **Batches:** create batches with an order deadline, pickup date and maximum quantity per product. A batch closes automatically at its deadline or when full (Shaikha)
