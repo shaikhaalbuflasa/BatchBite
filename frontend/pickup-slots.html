@@ -3,17 +3,80 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pickup slots | BatchBite</title>
+  <title>Pickup Slots | BatchBite</title>
   <link rel="icon" href="data:,">
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/shop.css">
+  <link rel="stylesheet" href="css/orders.css">
 </head>
 <body>
   <header id="app-header"></header>
+
   <main class="container">
-    <div class="page-head"><div><h1>Pickup slots</h1><p>Temporary page for testing. Marwa's finished page replaces this file.</p></div></div>
-    <div id="root"><p class="loading">Loading...</p></div>
+    <div class="page-head">
+      <div>
+        <h1>Pickup Slots</h1>
+        <p>Set the times customers can collect their orders and how many orders each time can take.</p>
+      </div>
+      <button type="button" class="btn btn-secondary" id="refresh-btn">Refresh</button>
+    </div>
+
+    <section class="stats" id="stats" aria-label="Pickup slot summary"></section>
+
+    <div class="grid-2">
+      <!-- Create a slot (FR-12) -->
+      <section class="card" aria-labelledby="add-title">
+        <h2 id="add-title">Add a pickup slot</h2>
+        <p class="muted small">Slots are on the batch's pickup date. Customers can't pick a slot once it is full (FR-13).</p>
+        <form id="slot-form" novalidate>
+          <div class="field">
+            <label for="batchId">Batch</label>
+            <select id="batchId" name="batchId"></select>
+            <div class="field-error" data-error-for="batchId"></div>
+          </div>
+          <div class="field">
+            <label for="date">Pickup date</label>
+            <input type="date" id="date" name="date" readonly>
+            <div class="hint small muted">Set by the batch.</div>
+          </div>
+          <div class="form-grid">
+            <div class="field">
+              <label for="startTime">Start time</label>
+              <input type="time" id="startTime" name="startTime" value="12:00" required>
+              <div class="field-error" data-error-for="startTime"></div>
+            </div>
+            <div class="field">
+              <label for="endTime">End time</label>
+              <input type="time" id="endTime" name="endTime" value="12:30" required>
+              <div class="field-error" data-error-for="endTime"></div>
+            </div>
+          </div>
+          <div class="field">
+            <label for="maxOrders">Maximum orders in this slot</label>
+            <input type="number" id="maxOrders" name="maxOrders" min="1" max="500" value="5" required>
+            <div class="field-error" data-error-for="maxOrders"></div>
+          </div>
+          <div class="form-error" role="alert" hidden></div>
+          <button type="submit" class="btn btn-primary btn-block" id="add-btn">Add slot</button>
+        </form>
+      </section>
+
+      <!-- Existing slots -->
+      <section aria-labelledby="list-title">
+        <div class="toolbar">
+          <h2 id="list-title" style="margin:0;flex:1">My slots</h2>
+          <select id="filter-batch" aria-label="Filter by batch"></select>
+          <div class="chip-row" role="group" aria-label="Filter by availability">
+            <button type="button" class="chip" data-filter="all" aria-pressed="true">All</button>
+            <button type="button" class="chip" data-filter="open" aria-pressed="false">Has space</button>
+            <button type="button" class="chip" data-filter="full" aria-pressed="false">Full</button>
+          </div>
+        </div>
+        <div id="slot-list"><p class="loading">Loading...</p></div>
+      </section>
+    </div>
   </main>
+
   <script src="js/config.js"></script>
   <script src="js/api.js"></script>
   <script src="js/storage.js"></script>

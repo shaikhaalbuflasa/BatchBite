@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Orders | BatchBite</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/shop.css">
+  <link rel="stylesheet" href="css/orders.css">
+</head>
+<body>
+  <header id="app-header"></header>
+
+  <main class="container">
+    <div class="page-head">
+      <div>
+        <h1>My Orders</h1>
+        <p>Track your orders, change or cancel them before they are prepared, and show your pickup code.</p>
+      </div>
+      <div class="row-gap">
+        <a class="btn btn-secondary" href="catalogue.html">Browse batches</a>
+        <button type="button" class="btn btn-primary" id="refresh-btn">Refresh</button>
+      </div>
+    </div>
+
+    <section class="stats" id="stats" aria-label="Order summary"></section>
+
+    <div class="toolbar">
+      <div class="chip-row" role="group" aria-label="Filter orders">
+        <button type="button" class="chip" data-filter="active" aria-pressed="true">Active</button>
+        <button type="button" class="chip" data-filter="past" aria-pressed="false">Collected and cancelled</button>
+        <button type="button" class="chip" data-filter="all" aria-pressed="false">All</button>
+      </div>
+    </div>
+
+    <div id="orders"><p class="loading">Loading...</p></div>
+  </main>
+
+  <script src="js/config.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/vendor/qrcode.js"></script>
+  <script src="js/pages/my-orders.js"></script>
+</body>
+</html>

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Owner Dashboard | BatchBite</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/shop.css">
+  <link rel="stylesheet" href="css/orders.css">
+</head>
+<body>
+  <header id="app-header"></header>
+
+  <main class="container">
+    <div class="page-head">
+      <div>
+        <h1>Owner Dashboard</h1>
+        <p>All orders for your batches, cancellations and production progress in one place.</p>
+      </div>
+      <div class="row-gap">
+        <a class="btn btn-secondary" href="pickup-slots.html">Pickup slots</a>
+        <button type="button" class="btn btn-primary" id="refresh-btn">Refresh</button>
+      </div>
+    </div>
+
+    <h2>Order progress</h2>
+    <section class="progress-row stats" id="progress" aria-label="Orders by status"></section>
+
+    <h2>Business summary</h2>
+    <section class="stats" id="summary" aria-label="Business summary"></section>
+
+    <h2 style="margin-top:1.5rem">Orders</h2>
+    <div class="toolbar">
+      <input type="search" id="search" placeholder="Search by order number or customer" aria-label="Search orders">
+      <select id="filter-batch" aria-label="Filter by batch"></select>
+      <select id="filter-status" aria-label="Filter by status">
+        <option value="all">All statuses</option>
+        <option value="active">Active (not collected or cancelled)</option>
+        <option>Confirmed</option>
+        <option>Preparing</option>
+        <option>Ready</option>
+        <option>Collected</option>
+        <option>Cancelled</option>
+      </select>
+    </div>
+    <div id="orders"><p class="loading">Loading...</p></div>
+  </main>
+
+  <script src="js/config.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/pages/owner-dashboard.js"></script>
+</body>
+</html>

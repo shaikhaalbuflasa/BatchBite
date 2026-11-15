@@ -17,11 +17,7 @@ Same as the main README: start `backend/server.js` (port 3000), then `frontend/d
 ## Try it
 1. Log in as the Administrator and, in **Manage users**, give one account the **Business Owner** role and one the **Kitchen Staff** role.
 2. As the Business Owner: create a product, a batch and a pickup slot.
-3. Orders need an active recipe for each product. If the database has no recipes yet, stop the backend and run the team's test-data tool once (it adds Flour, Butter and Chocolate and one recipe per product variant):
-   ```
-   cd frontend
-   node tools/add-test-recipe.js ../backend/data
-   ```
+3. Optional: on **Products & Batches**, click **Recipe** on a product to list its ingredients, so stock is reserved and the recipe calculator has data.
 4. As a Customer: place an order from **Browse Batches**.
 5. As Kitchen Staff: open **Kitchen Dashboard** from the home page.
 
@@ -47,4 +43,4 @@ Same as the main README: start `backend/server.js` (port 3000), then `frontend/d
 ## Limitations
 - The backend does not return customer names to the kitchen, so cards show the customer ID.
 - Only an Administrator can list users, so tasks are assigned by Kitchen Staff user ID. Kitchen Staff default to their own ID.
-- Recipes have no create screen yet (no backend route); `tools/add-test-recipe.js` is test data only.
+- Recipes are created from the **Recipe** button on the Products page (`POST /recipes`). `tools/add-test-recipe.js` is still there for quick test data but is no longer needed.
