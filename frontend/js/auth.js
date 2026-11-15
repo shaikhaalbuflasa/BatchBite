@@ -35,10 +35,10 @@ const Auth = (() => {
    * Teammates: when your page is ready, check the href and set ready: true.
    */
   const MODULES = [
-    { id: 'browse',    title: 'Browse Batches',     href: 'catalogue.html',       roles: ['Customer'],                      ready: false, text: 'See open production batches and add products to your order.' },
+    { id: 'browse',    title: 'Browse Batches',     href: 'catalogue.html',       roles: ['Customer'],                      ready: true, text: 'See open production batches and add products to your order.' },
     { id: 'myorders',  title: 'My Orders',          href: 'my-orders.html',       roles: ['Customer'],                      ready: false, text: 'Track your orders, modify or cancel them, and show your pickup QR code.' },
-    { id: 'products',  title: 'Products & Batches', href: 'products.html',        roles: ['BusinessOwner'],                 ready: false, text: 'Create and edit products and production batches.' },
-    { id: 'slots',     title: 'Pickup Slots',       href: 'pickup-slots.html',    roles: ['BusinessOwner'],                 ready: false, text: 'Create pickup time slots and set their limits.' },
+    { id: 'products',  title: 'Products & Batches', href: 'products.html',        roles: ['BusinessOwner'],                 ready: true, text: 'Create and edit products and production batches.' },
+    { id: 'slots',     title: 'Pickup Slots',       href: 'pickup-slots.html',    roles: ['BusinessOwner'],                 ready: true, text: 'Create pickup time slots and set their limits.' },
     { id: 'dashboard', title: 'Owner Dashboard',    href: 'owner-dashboard.html', roles: ['BusinessOwner'],                 ready: false, text: 'See your orders, reports and production progress.' },
     { id: 'inventory', title: 'Ingredients',        href: 'ingredients.html',     roles: ['BusinessOwner', 'KitchenStaff'], ready: false, text: 'Check stock levels and recipe requirements.' },
     { id: 'kitchen',   title: 'Kitchen Board',      href: 'kitchen.html',         roles: ['KitchenStaff', 'BusinessOwner'], ready: false, text: 'Update order status, manage tasks and verify pickup codes.' },

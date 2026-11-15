@@ -1,0 +1,7 @@
+/* Shared styles for the product, batch and catalogue pages (Shaikha's modules) */
+input[type=number],input[type=date],input[type=datetime-local],textarea{width:100%;font:inherit;color:var(--ink-strong);padding:.7em .9em;border-radius:var(--radius-sm);border:1px solid var(--line-strong);background:var(--white)}
+.shop-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:1.1rem;margin-bottom:1.5rem}
+.shop-grid .card+.card{margin-top:0}.line{display:flex;gap:.6rem;align-items:center;justify-content:space-between;padding:.45rem 0;border-bottom:1px solid var(--line)}
+.line input[type=number]{width:5.5rem}.row-gap{display:flex;gap:.5rem;flex-wrap:wrap}.cart-bar{position:sticky;top:.5rem}
+.layout-2{display:grid;grid-template-columns:2fr 1fr;gap:1.25rem;align-items:start}@media(max-width:860px){.layout-2{grid-template-columns:1fr}}
+.pill{display:inline-block;padding:.1em .6em;border-radius:99px;font-size:.75rem;font-weight:600;background:var(--butter-yellow);color:var(--primary-ink)}.pill.off{background:var(--line)}
