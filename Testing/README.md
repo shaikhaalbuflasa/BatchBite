@@ -9,7 +9,7 @@ Each module was tested in Google Chrome with the frontend connected to the team 
 | Pickup and order management | Marwa | 24 (PO-01 to PO-24), below | All pass |
 | Kitchen dashboard and notifications | Aaya | see `frontend/KITCHEN-MODULE.md` | |
 | Full journey and setup (integration) | Team | 15 (IT-01 to IT-15), below | All pass |
-| Roles, sign-up and switching accounts | Team | 12 (RS-01 to RS-12), below | All pass |
+| Roles, sign-up and switching accounts | Team | 16 (RS-01 to RS-16), below | All pass |
 | Product photos | Team | 4 (PH-01 to PH-04), below | All pass |
 
 ## Pickup and Order Management (Marwa)
@@ -76,11 +76,15 @@ Tested on 15 November 2026 by downloading the repository, following the README e
 | RS-05 | Duplicate staff email | Use an email that already exists | "An account with this email already exists"; nothing saved | Pass |
 | RS-06 | Wrong role chosen | Kitchen Staff email with "Customer" selected | "This is a Kitchen Staff account. Choose "Kitchen Staff" above"; not signed in | Pass |
 | RS-07 | Switch account list | Sign in as all four roles, click Switch | All four accounts listed with their role; current one marked | Pass |
-| RS-08 | One-click switching | Pick Administrator, then Business Owner | Header, menu and home tools change to that role | Pass |
+| RS-08 | Switching | Pick Business Owner, then Customer | Header, menu and home tools change to that role in one click | Pass |
 | RS-09 | Owner turns off staff | Turn off, then staff tries to log in or is switched to | Login refused; switching sends to the login page | Pass |
 | RS-10 | Sign-up rules (server) | POST /register as KitchenStaff or Administrator | Refused (400) | Pass |
 | RS-11 | Staff page rules (server) | Customer token calls POST /owner/staff | Refused (403) | Pass |
 | RS-12 | Log out | Log out of one account, open Switch | That account is no longer listed; others still are | Pass |
+| RS-13 | Administrator needs password | From the Customer, Switch and pick the Administrator | Asks for the Administrator password; the row shows a lock | Pass |
+| RS-14 | Wrong Administrator password | Enter a wrong password | "That password is not correct"; you stay in the Customer account | Pass |
+| RS-15 | Asks every time | Switch to Administrator, back to Customer, then to Administrator again | Password asked again; Customer and other roles need no password | Pass |
+| RS-16 | Old Administrator session ended | After switching away, reuse the old Administrator token | Refused by the server (403); the token is never kept in the browser | Pass |
 
 ## Product photos
 
