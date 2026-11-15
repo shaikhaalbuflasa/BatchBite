@@ -28,8 +28,8 @@ You need [Node.js](https://nodejs.org) (LTS version). Everything else is in this
    ```
    npm start
    ```
-   You should see `Open http://localhost:3000 in your browser`. Leave this window open while you use the app.
-5. **Open http://localhost:3000** in your browser.
+   Your browser opens BatchBite automatically. Leave this window open while you use the app.
+5. **If the browser doesn't open by itself**, go to **http://localhost:3000**.
    - The **first time**, BatchBite asks you to create the **Administrator** account (name, email and password). After that it signs you in.
    - From then on, everything is done in the browser. You don't need the terminal again until you want to stop the app (press **Ctrl+C** in that window).
 
