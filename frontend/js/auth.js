@@ -36,10 +36,10 @@ const Auth = (() => {
    */
   const MODULES = [
     { id: 'browse',    title: 'Browse Batches',     href: 'catalogue.html',       roles: ['Customer'],                      ready: true, text: 'See open production batches and add products to your order.' },
-    { id: 'myorders',  title: 'My Orders',          href: 'my-orders.html',       roles: ['Customer'],                      ready: false, text: 'Track your orders, modify or cancel them, and show your pickup QR code.' },
+    { id: 'myorders',  title: 'My Orders',          href: 'my-orders.html',       roles: ['Customer'],                      ready: true, text: 'Track your orders, modify or cancel them, and show your pickup QR code.' },
     { id: 'products',  title: 'Products & Batches', href: 'products.html',        roles: ['BusinessOwner'],                 ready: true, text: 'Create and edit products and production batches.' },
     { id: 'slots',     title: 'Pickup Slots',       href: 'pickup-slots.html',    roles: ['BusinessOwner'],                 ready: true, text: 'Create pickup time slots and set their limits.' },
-    { id: 'dashboard', title: 'Owner Dashboard',    href: 'owner-dashboard.html', roles: ['BusinessOwner'],                 ready: false, text: 'See your orders, reports and production progress.' },
+    { id: 'dashboard', title: 'Owner Dashboard',    href: 'owner-dashboard.html', roles: ['BusinessOwner'],                 ready: true, text: 'See your orders, reports and production progress.' },
     { id: 'inventory', title: 'Ingredients',        href: 'ingredients.html',     roles: ['BusinessOwner', 'KitchenStaff'], ready: true,  text: 'Check stock levels and recipe requirements.' },
     { id: 'kitchen',   title: 'Kitchen Dashboard',  href: 'kitchen.html',         roles: ['KitchenStaff', 'BusinessOwner'], ready: true,  text: 'Update order status, manage tasks and verify pickup codes.' },
     { id: 'notifications', title: 'Notifications', href: 'notifications.html', roles: ['Customer', 'BusinessOwner', 'KitchenStaff', 'Administrator'], ready: true, text: 'See order updates such as confirmations, delays and pickups.' },

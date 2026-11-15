@@ -66,7 +66,8 @@ const UI = (() => {
         T('home', 'Home', 'home.html', 'home'),
         T('products', 'Products', 'products.html', 'products', 'products'),
         T('batches', 'Batches', 'products.html#batches', 'batches', 'products', '#new-batch'),
-        T('orders', 'Orders', 'kitchen.html', 'orders', 'kitchen'),
+        moduleReady('dashboard') ? T('orders', 'Orders', 'owner-dashboard.html', 'orders', 'dashboard')
+                                 : T('orders', 'Orders', 'kitchen.html', 'orders', 'kitchen'),
         T('profile', 'Profile', 'profile.html', 'profile')
       ],
       KitchenStaff: [
