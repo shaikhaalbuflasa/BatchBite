@@ -54,9 +54,9 @@ New accounts are created as **Customer**. Only an Administrator can change a rol
 | Role | What they can do |
 |---|---|
 | Administrator | View users, change roles, activate or deactivate and delete accounts |
-| Business Owner | Create products and batches, create pickup slots |
+| Business Owner | Create products and batches, create pickup slots, manage ingredient stock, use the Kitchen Dashboard for their own orders |
 | Customer | Browse open batches, use the cart, choose a pickup slot, place an order |
-| Kitchen Staff | Kitchen and production tools (backend ready, screens being integrated) |
+| Kitchen Staff | Kitchen Dashboard (order status, delay notices, preparation groups, production tasks, pickup verification), ingredient and recipe calculator |
 
 ## Features in this phase
 
