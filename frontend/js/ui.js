@@ -192,7 +192,7 @@ const UI = (() => {
         '<span class="avatar" aria-hidden="true">' + escape(initials(a.user.name)) + '</span>' +
         '<span class="account-text"><strong>' + escape(a.user.name) + '</strong><span class="muted small">' + escape(a.user.email) + '</span></span>' +
         roleBadge(a.user.role) +
-        (isCurrent ? '<span class="small muted">Current</span>' : '') +
+        (isCurrent ? '<span class="small muted">Current</span>' : (a.locked ? '<span class="small muted" title="Password needed">&#128274; Password</span>' : '')) +
       '</button>';
     };
     modal({
@@ -206,8 +206,39 @@ const UI = (() => {
     document.querySelectorAll('[data-account]').forEach(btn => btn.addEventListener('click', () => {
       const next = Auth.switchTo(Number(btn.dataset.account));
       if (!next) { toast('That account has signed out. Please log in again.', 'error'); return; }
+      if (next.needsPassword) {
+        const open = document.querySelector('.modal-backdrop');
+        if (open) open.remove();
+        askAdminPassword(next.user, next.persistent);
+        return;
+      }
       location.href = 'home.html';
     }));
+  }
+
+  /* Switching back to an Administrator always asks for the password again. */
+  function askAdminPassword(admin, persistent) {
+    modal({
+      title: 'Enter the Administrator password',
+      message: 'For security, ' + admin.name + ' (' + admin.email + ') needs the password every time you switch to the Administrator account.',
+      bodyHtml: '<div class="field"><label for="admin-password">Password</label>' +
+        '<div class="password-wrap"><input type="password" id="admin-password" name="password" autocomplete="current-password">' +
+        '<button type="button" data-toggle-password="admin-password" aria-label="Show password" aria-pressed="false">Show</button></div>' +
+        '<div class="field-error" data-error-for="password"></div></div>',
+      confirmText: 'Switch to Administrator',
+      onSubmit: async form => {
+        if (!form.password.value) return { ok: false, field: 'password', error: 'Enter the password.' };
+        const submit = form.querySelector('[type=submit]');
+        setBusy(submit, true, 'Checking...');
+        const result = await Auth.login(admin.email, form.password.value, persistent, 'Administrator');
+        if (!result.ok) {
+          setBusy(submit, false);
+          return { ok: false, field: 'password', error: /incorrect|deactivated/i.test(result.error || '') ? 'That password is not correct.' : result.error };
+        }
+        return { ok: true };
+      }
+    }).then(done => { if (done) location.href = 'home.html'; });
+    bindPasswordToggles(document.querySelector('.modal'));
   }
 
   /* ---------- server unreachable banner ---------- */

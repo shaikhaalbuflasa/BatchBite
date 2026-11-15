@@ -128,7 +128,7 @@ const Auth = (() => {
     const all = readAccounts(ACCOUNTS_KEEP, true).map(a => Object.assign({}, a, { persistent: true }))
       .concat(readAccounts(ACCOUNTS_TEMP, false).map(a => Object.assign({}, a, { persistent: false })));
     const seen = new Set();
-    return all.filter(a => a && a.user && a.token && new Date(a.expiresAt) > now && !seen.has(a.user.id) && seen.add(a.user.id))
+    return all.filter(a => a && a.user && (a.locked || (a.token && new Date(a.expiresAt) > now)) && !seen.has(a.user.id) && seen.add(a.user.id))
       .sort((a, b) => ((ROLES[b.user.role] || {}).level || 0) - ((ROLES[a.user.role] || {}).level || 0));
   }
 
@@ -137,20 +137,39 @@ const Auth = (() => {
       writeAccounts(key, persistent, readAccounts(key, persistent).filter(a => !a.user || a.user.id !== userId)));
   }
 
+  // Administrator accounts are listed but never kept signed in: the list stores
+  // no token for them, so switching back to an Administrator always asks for
+  // the password again (security).
   function rememberAccount(session, persistent) {
     forgetAccount(session.user.id);
     const key = persistent ? ACCOUNTS_KEEP : ACCOUNTS_TEMP;
-    writeAccounts(key, persistent, readAccounts(key, persistent).concat([session]));
+    const entry = session.user.role === 'Administrator'
+      ? { user: session.user, locked: true }
+      : session;
+    writeAccounts(key, persistent, readAccounts(key, persistent).concat([entry]));
   }
 
-  /** Make a saved account the current one. Returns the user, or null if it is no longer saved. */
+  /** When leaving an Administrator session, end it on the server so its token can't be reused. */
+  function endAdminSession(nextUserId) {
+    const current = getSession();
+    if (current && current.user.role === 'Administrator' && current.user.id !== nextUserId) {
+      Api.request('/logout', { method: 'POST', token: current.token }).catch(() => { /* already ended */ });
+    }
+  }
+
+  /**
+   * Make a saved account the current one.
+   * Returns { user }, { needsPassword: true, user } for an Administrator, or null if it is no longer saved.
+   */
   function switchTo(userId) {
     const account = savedAccounts().find(a => a.user.id === userId);
     if (!account) return null;
+    if (account.locked) return { needsPassword: true, user: account.user, persistent: account.persistent };
+    endAdminSession(userId);
     const session = { token: account.token, user: account.user, signedInAt: account.signedInAt, expiresAt: account.expiresAt };
     Store.set(SESSION_KEY, session, account.persistent);
     Store.set('lastEmail', account.user.email, true);
-    return account.user;
+    return { user: account.user };
   }
 
   /* ---------------- registration ---------------- */
@@ -204,6 +223,7 @@ const Auth = (() => {
         signedInAt: new Date().toISOString(),
         expiresAt: new Date(Date.now() + SESSION_HOURS * 3600000).toISOString()
       };
+      endAdminSession(result.user.id);
       Store.set(SESSION_KEY, session, !!remember);
       rememberAccount(session, !!remember);
       Store.set('lastEmail', result.user.email, true);
