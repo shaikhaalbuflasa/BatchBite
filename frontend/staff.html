@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kitchen Staff | BatchBite</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/shop.css">
+  <link rel="stylesheet" href="css/orders.css">
+  <link rel="stylesheet" href="css/accounts.css">
+</head>
+<body>
+  <header id="app-header"></header>
+
+  <main class="container">
+    <div class="page-head">
+      <div>
+        <h1>Kitchen Staff</h1>
+        <p>Create logins for your kitchen team. They sign in by choosing "Kitchen Staff" on the login page.</p>
+      </div>
+      <a class="btn btn-secondary" href="kitchen.html">Kitchen Dashboard</a>
+    </div>
+
+    <div class="grid-2">
+      <section class="card" aria-labelledby="add-title">
+        <h2 id="add-title">Add a staff member</h2>
+        <p class="muted small">Give them the email and password you set here. They can't sign up by themselves.</p>
+        <form id="staff-form" novalidate>
+          <div class="field">
+            <label for="name">Full name</label>
+            <input type="text" id="name" name="name" maxlength="60" placeholder="e.g. Kareem Ali" autocomplete="off">
+            <div class="field-error" data-error-for="name"></div>
+          </div>
+          <div class="field">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" placeholder="name@example.com" autocomplete="off">
+            <div class="field-error" data-error-for="email"></div>
+          </div>
+          <div class="field">
+            <label for="password">Password</label>
+            <div class="password-wrap">
+              <input type="password" id="password" name="password" autocomplete="new-password">
+              <button type="button" data-toggle-password="password" aria-label="Show password" aria-pressed="false">Show</button>
+            </div>
+            <div class="hint">At least 8 characters.</div>
+            <div class="field-error" data-error-for="password"></div>
+          </div>
+          <div class="form-error" role="alert" hidden></div>
+          <button type="submit" class="btn btn-primary btn-block" id="add-btn">Create staff login</button>
+        </form>
+      </section>
+
+      <section aria-labelledby="list-title">
+        <h2 id="list-title">My team</h2>
+        <div id="staff-list"><p class="loading">Loading...</p></div>
+      </section>
+    </div>
+  </main>
+
+  <script src="js/config.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/pages/staff.js"></script>
+</body>
+</html>

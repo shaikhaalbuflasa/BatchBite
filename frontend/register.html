@@ -6,6 +6,7 @@
   <title>Sign up | BatchBite</title>
   <link rel="icon" href="data:,">
   <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/accounts.css">
 </head>
 <body>
   <main class="auth-page">
@@ -13,11 +14,19 @@
       <div class="auth-logo">
         <div class="logo-circle">B</div>
         <h1>Create your account</h1>
-        <p>Join BatchBite to preorder fresh batches</p>
+        <p>Join BatchBite as a customer or a business</p>
       </div>
 
       <form id="register-form" novalidate>
         <div class="form-error" role="alert" hidden></div>
+
+        <fieldset class="field role-pick">
+          <legend>I am signing up as a</legend>
+          <div class="role-options">
+            <label class="role-option"><input type="radio" name="accountType" value="Customer" checked><span><strong>Customer</strong>Order from open batches</span></label>
+            <label class="role-option"><input type="radio" name="accountType" value="BusinessOwner"><span><strong>Business Owner</strong>Sell your bakes in batches</span></label>
+          </div>
+        </fieldset>
 
         <div class="field">
           <label for="name">Full name</label>
@@ -51,7 +60,7 @@
           </div>
         </div>
 
-        <p class="hint small" style="margin:-.2rem 0 1.1rem">New accounts are Customer accounts. Business Owner and Kitchen Staff access is given by the administrator.</p>
+        <p class="hint small" style="margin:-.2rem 0 1.1rem">Kitchen Staff don't sign up: their Business Owner creates their account. The Administrator account is created when BatchBite is first set up.</p>
 
         <button type="submit" class="btn btn-primary btn-block">Create account</button>
       </form>

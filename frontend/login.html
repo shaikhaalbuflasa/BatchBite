@@ -6,6 +6,7 @@
   <title>Log in | BatchBite</title>
   <link rel="icon" href="data:,">
   <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/accounts.css">
 </head>
 <body>
   <main class="auth-page">
@@ -19,6 +20,17 @@
       <div class="form-notice" id="notice" hidden></div>
 
       <form id="login-form" novalidate>
+        <fieldset class="field role-pick">
+          <legend>Who are you?</legend>
+          <div class="role-options">
+            <label class="role-option"><input type="radio" name="as" value="Customer" checked><span><strong>Customer</strong>Order from open batches</span></label>
+            <label class="role-option"><input type="radio" name="as" value="BusinessOwner"><span><strong>Business Owner</strong>Run your bakery</span></label>
+            <label class="role-option"><input type="radio" name="as" value="KitchenStaff"><span><strong>Kitchen Staff</strong>Prepare orders</span></label>
+            <label class="role-option"><input type="radio" name="as" value="Administrator"><span><strong>Administrator</strong>Manage accounts</span></label>
+          </div>
+          <p class="hint small" id="role-hint"></p>
+        </fieldset>
+
         <div class="form-error" role="alert" hidden></div>
 
         <div class="field">
@@ -44,7 +56,7 @@
         <button type="submit" class="btn btn-primary btn-block">Log in</button>
       </form>
 
-      <p class="auth-footer">Don't have an account? <a href="register.html">Sign up</a></p>
+      <p class="auth-footer" id="auth-footer">Don't have an account? <a href="register.html" id="signup-link">Sign up</a></p>
     </section>
   </main>
 

@@ -7,6 +7,11 @@ From the repository folder: `npm install` (first time), then `npm start`, and op
 
 On a fresh database the app opens a **first-run setup page** to create the first Administrator in the browser (`GET /setup/status`, `POST /setup/admin`; closed once an Administrator exists). `tools/create-admin.js` still works as an alternative from the terminal.
 
+## Roles, sign-up and switching
+- The login page asks **Who are you?** (Customer, Business Owner, Kitchen Staff, Administrator). The account must match the role chosen.
+- **Sign up** is offered for Customer and Business Owner (`POST /register` with `accountType`). Kitchen Staff logins are created by their Business Owner on `staff.html` (`GET/POST/PUT /owner/staff`). The Administrator is created on the first-run setup page.
+- **Switch** in the top bar lists every account signed in on this browser (`batchbite.accounts` in localStorage for "Keep me signed in", `batchbite.accountsTemp` in sessionStorage otherwise) and switches in one click. Logging out removes that account from the list.
+
 ## Backend routes used
 | Route | Used for |
 |---|---|
