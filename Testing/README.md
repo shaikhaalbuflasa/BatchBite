@@ -9,6 +9,7 @@ Each module was tested in Google Chrome with the frontend connected to the team 
 | Pickup and order management | Marwa | 24 (PO-01 to PO-24), below | All pass |
 | Kitchen dashboard and notifications | Aaya | see `frontend/KITCHEN-MODULE.md` | |
 | Full journey and setup (integration) | Team | 15 (IT-01 to IT-15), below | All pass |
+| Roles, sign-up and switching accounts | Team | 12 (RS-01 to RS-12), below | All pass |
 
 ## Pickup and Order Management (Marwa)
 
@@ -49,7 +50,7 @@ Tested on 15 November 2026 by downloading the repository, following the README e
 |---|---|---|---|---|
 | IT-01 | One-command start | In the repository folder: `npm install`, then `npm start` | One server; app opens at http://localhost:3000; `backend/data` created automatically | Pass |
 | IT-02 | First-run setup in the browser | Open http://localhost:3000 on a fresh download | Setup page opens; Administrator created and signed in; no terminal step | Pass |
-| IT-03 | Roles from the app | Register 3 users; Administrator sets Business Owner and Kitchen Staff in Users | Roles saved; each role sees only its tools; no "Being integrated" cards | Pass |
+| IT-03 | Roles from the app | Sign up a Business Owner and a Customer; the Business Owner creates a Kitchen Staff login | Each role sees only its tools; no "Being integrated" cards | Pass |
 | IT-04 | Recipe in the app | Owner clicks Recipe, adds Flour 300 g and Chocolate 200 g, makes 6 | Recipe saved; new ingredients added with their stock; card shows "Recipe added" | Pass |
 | IT-05 | Recipe validation | New ingredient with no stock entered | "Enter how much Chocolate you have in stock"; nothing saved | Pass |
 | IT-06 | Recipe versions (FR-23) | Save a new recipe for the same variant | Old version kept but inactive; new version active | Pass |
@@ -62,3 +63,20 @@ Tested on 15 November 2026 by downloading the repository, following the README e
 | IT-13 | Setup closes after first use | Open setup.html again, or call POST /api/setup/admin when an Administrator exists | Sent to Log in; backend refuses (403) | Pass |
 | IT-14 | Setup validation | Short password, bad email, passwords that don't match | Error under the right field; nothing saved | Pass |
 | IT-15 | Developer files hidden | Open /tools/create-admin.js and /dev-server.js in the browser | Not found (404) | Pass |
+
+## Roles, sign-up and switching accounts
+
+| ID | Test case | Input / steps | Expected result | Result |
+|---|---|---|---|---|
+| RS-01 | Role choice on login | Open the login page | "Who are you?" with Customer, Business Owner, Kitchen Staff and Administrator | Pass |
+| RS-02 | Who can sign up | Choose each role | Sign up link for Customer and Business Owner only; Kitchen Staff and Administrator see how their account is created | Pass |
+| RS-03 | Business Owner sign-up | Choose Business Owner, Sign up | Sign-up page has Business Owner selected; account created; login page has Business Owner selected | Pass |
+| RS-04 | Owner creates Kitchen Staff | Kitchen Staff page: name, email, password | Staff login created and listed with its user ID | Pass |
+| RS-05 | Duplicate staff email | Use an email that already exists | "An account with this email already exists"; nothing saved | Pass |
+| RS-06 | Wrong role chosen | Kitchen Staff email with "Customer" selected | "This is a Kitchen Staff account. Choose "Kitchen Staff" above"; not signed in | Pass |
+| RS-07 | Switch account list | Sign in as all four roles, click Switch | All four accounts listed with their role; current one marked | Pass |
+| RS-08 | One-click switching | Pick Administrator, then Business Owner | Header, menu and home tools change to that role | Pass |
+| RS-09 | Owner turns off staff | Turn off, then staff tries to log in or is switched to | Login refused; switching sends to the login page | Pass |
+| RS-10 | Sign-up rules (server) | POST /register as KitchenStaff or Administrator | Refused (400) | Pass |
+| RS-11 | Staff page rules (server) | Customer token calls POST /owner/staff | Refused (403) | Pass |
+| RS-12 | Log out | Log out of one account, open Switch | That account is no longer listed; others still are | Pass |
