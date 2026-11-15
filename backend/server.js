@@ -7,6 +7,32 @@ const app = express();
 
 app.use(express.json());
 
+// ---------------------------------------------------------------------------
+// One server for the whole app.
+// The pages in ../frontend are served from here, and the API is available
+// under /api (which the pages use) as well as at its original paths.
+// Start everything with:  npm start   ->  http://localhost:3000
+// ---------------------------------------------------------------------------
+const path = require("path");
+const FRONTEND_DIR = path.join(__dirname, "..", "frontend");
+const servePages = express.static(FRONTEND_DIR);
+
+app.use((req, res, next) => {
+    if (req.url === "/api" || req.url.startsWith("/api/") || req.url.startsWith("/api?")) {
+        req.url = req.url.slice(4) || "/";
+        if (req.url[0] !== "/") req.url = "/" + req.url;
+        return next();
+    }
+
+    // Developer-only files are never sent to the browser
+    if (/^\/(tools|node_modules)\//.test(req.path) ||
+        /\/(dev-server|add-test-recipe)\.js$/.test(req.path)) {
+        return res.status(404).send("Not found");
+    }
+
+    servePages(req, res, next);
+});
+
 
 function hashPassword(password) {
     const salt = crypto.randomBytes(16).toString("hex");
@@ -101,6 +127,77 @@ function ownerOwnsTask(ownerId, task) {
 
 app.get("/", (req, res) => {
     res.send("BatchBite server is running!");
+});
+
+
+// ---------------------------------------------------------------------------
+// First-run setup: create the first Administrator from the browser.
+// Only works while there is no Administrator account yet; after that it is
+// closed for good, and new accounts register as Customers as usual.
+// ---------------------------------------------------------------------------
+function hasAdministrator() {
+    return readData("users").some(u => u.role === "Administrator");
+}
+
+app.get("/setup/status", (req, res) => {
+    res.json({
+        needsAdministrator: !hasAdministrator()
+    });
+});
+
+app.post("/setup/admin", (req, res) => {
+    if (hasAdministrator()) {
+        return res.status(403).json({
+            error: "BatchBite is already set up. Please log in."
+        });
+    }
+
+    const name = req.body.name;
+    const email = req.body.email;
+    const password = req.body.password;
+
+    if (typeof name !== "string" || name.trim().length < 2) {
+        return res.status(400).json({ error: "Enter your full name." });
+    }
+
+    if (typeof email !== "string" || !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email.trim())) {
+        return res.status(400).json({ error: "Enter a valid email address." });
+    }
+
+    if (typeof password !== "string" || password.length < 8) {
+        return res.status(400).json({ error: "Password must be at least 8 characters." });
+    }
+
+    const users = readData("users");
+    const normalizedEmail = email.trim().toLowerCase();
+
+    if (users.some(u => u.email.toLowerCase() === normalizedEmail)) {
+        return res.status(400).json({ error: "Email is already registered" });
+    }
+
+    const newId = users.length > 0
+        ? Math.max(...users.map(u => u.id)) + 1
+        : 1;
+
+    const admin = {
+        id: newId,
+        name: name.trim(),
+        email: normalizedEmail,
+        passwordHash: hashPassword(password),
+        role: "Administrator",
+        isActive: true
+    };
+
+    users.push(admin);
+    writeData("users", users);
+
+    res.status(201).json({
+        id: admin.id,
+        name: admin.name,
+        email: admin.email,
+        role: admin.role,
+        isActive: admin.isActive
+    });
 });
 
 
@@ -2834,6 +2931,10 @@ app.delete("/stockHolds/:id", requireRole("Customer"), (req, res) => {
 
 
 
-app.listen(3000, () => {
-    console.log("BatchBite server running at http://localhost:3000");
+const PORT = Number(process.env.PORT) || 3000;
+
+app.listen(PORT, () => {
+    console.log("BatchBite is running.");
+    console.log("Open http://localhost:" + PORT + " in your browser.");
+    console.log("Keep this window open while you use the app. Press Ctrl+C to stop.");
 });
