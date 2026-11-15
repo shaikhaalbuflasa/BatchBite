@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My account | BatchBite</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header id="app-header"></header>
+
+  <main class="container">
+    <div class="page-head">
+      <div>
+        <h1>My account</h1>
+        <p>Your BatchBite account details and session.</p>
+      </div>
+    </div>
+
+    <div class="profile-grid">
+      <aside class="card profile-summary">
+        <span class="avatar lg" id="p-avatar"></span>
+        <h2 id="p-name"></h2>
+        <div id="p-role"></div>
+        <dl>
+          <dt>Email</dt><dd id="p-email"></dd>
+          <dt>User ID</dt><dd id="p-id"></dd>
+          <dt>Account status</dt><dd id="p-status"></dd>
+        </dl>
+      </aside>
+
+      <div>
+        <section class="card">
+          <h2>What you can do</h2>
+          <p class="card-sub" id="p-role-text"></p>
+          <ul id="p-modules" class="plain-list"></ul>
+        </section>
+
+        <section class="card">
+          <h2>Session</h2>
+          <p class="card-sub" id="p-session"></p>
+          <button type="button" class="btn btn-secondary" id="logout-here">Log out</button>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <script src="js/config.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/pages/profile.js"></script>
+</body>
+</html>

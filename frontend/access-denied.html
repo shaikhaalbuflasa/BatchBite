@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Access denied | BatchBite</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header id="app-header"></header>
+
+  <main class="container">
+    <section class="card center-card">
+      <div class="big-icon" aria-hidden="true">!</div>
+      <h1>Access denied</h1>
+      <p class="muted" id="denied-text">Your account role does not have permission to open this page.</p>
+      <a class="btn btn-primary" href="home.html">Back to home</a>
+    </section>
+  </main>
+
+  <script src="js/config.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/ui.js"></script>
+  <script>
+    (async () => {
+      const me = await Auth.requireRole();
+      if (!me) return;
+      UI.renderHeader(me, '');
+      document.getElementById('denied-text').textContent =
+        'Your role (' + Auth.ROLES[me.role].label + ') does not have permission to open this page. ' +
+        'If you think this is a mistake, contact the administrator.';
+    })();
+  </script>
+</body>
+</html>
