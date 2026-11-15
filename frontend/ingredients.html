@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ingredients | BatchBite</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/kitchen.css">
+</head>
+<body>
+  <header id="app-header"></header>
+
+  <main class="container">
+    <div class="page-head">
+      <div>
+        <h1>Ingredients</h1>
+        <p>Check stock, calculate what a recipe needs and see what to buy.</p>
+      </div>
+      <div style="display:flex;gap:.5rem;flex-wrap:wrap">
+        <a class="btn btn-secondary" href="kitchen.html">Kitchen Dashboard</a>
+        <button type="button" class="btn btn-primary" id="refresh-btn">Refresh</button>
+      </div>
+    </div>
+
+    <!-- Inventory -->
+    <section class="k-section" id="inventory">
+      <div class="row-between">
+        <div>
+          <h2>Inventory</h2>
+          <p class="card-sub" id="inventory-sub">Available stock, the amount reserved for confirmed orders, and what is free to use.</p>
+        </div>
+      </div>
+
+      <form class="card" id="add-form" novalidate hidden style="margin-bottom:1rem">
+        <h3 style="margin-bottom:.8rem">Add ingredient</h3>
+        <div class="form-error" role="alert" hidden></div>
+        <div class="form-row">
+          <div class="field span-2">
+            <label for="ing-name">Name</label>
+            <input type="text" id="ing-name" name="name" maxlength="60" placeholder="e.g. Sugar">
+            <div class="field-error" data-error-for="name"></div>
+          </div>
+          <div class="field">
+            <label for="ing-unit">Unit</label>
+            <input type="text" id="ing-unit" name="unit" maxlength="12" placeholder="g, ml, pcs">
+            <div class="field-error" data-error-for="unit"></div>
+          </div>
+          <div class="field">
+            <label for="ing-qty">Starting stock</label>
+            <input type="number" id="ing-qty" name="quantityAvailable" min="0" step="any">
+            <div class="field-error" data-error-for="quantityAvailable"></div>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary">Add ingredient</button>
+      </form>
+
+      <div class="table-wrap">
+        <table>
+          <thead id="inv-head"></thead>
+          <tbody id="inv-rows"><tr><td colspan="6" class="loading">Loading...</td></tr></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Recipe calculator -->
+    <section class="k-section" id="calculator">
+      <div class="row-between">
+        <div>
+          <h2>Recipe calculator</h2>
+          <p class="card-sub">Pick a recipe and how many to make. The server works out the ingredients and compares them with free stock.</p>
+        </div>
+      </div>
+      <form class="card" id="calc-form" novalidate>
+        <div class="form-error" role="alert" hidden></div>
+        <div class="form-row">
+          <div class="field span-2">
+            <label for="calc-recipe">Recipe</label>
+            <select id="calc-recipe" name="recipeId"></select>
+            <div class="field-error" data-error-for="recipeId"></div>
+          </div>
+          <div class="field">
+            <label for="calc-qty">Quantity to make</label>
+            <input type="number" id="calc-qty" name="quantity" min="1" step="1" value="12">
+            <div class="field-error" data-error-for="quantity"></div>
+          </div>
+          <div class="field" style="align-self:end">
+            <button type="submit" class="btn btn-primary" style="width:100%">Calculate</button>
+          </div>
+        </div>
+      </form>
+      <div id="calc-result" class="result-box" aria-live="polite"></div>
+    </section>
+  </main>
+
+  <script src="js/config.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/pages/ingredients.js"></script>
+</body>
+</html>
